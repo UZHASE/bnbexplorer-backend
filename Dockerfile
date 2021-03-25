@@ -1,16 +1,9 @@
-FROM python:3-alpine
+FROM python:3.9-alpine
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+ADD requirements.txt /bnbexplorer-backend/requirements.txt
 
-COPY requirements.txt /usr/src/app/
+WORKDIR /bnbexplorer-backend
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install -r requirements.txt
 
-COPY . /usr/src/app
-
-EXPOSE 8080
-
-ENTRYPOINT ["python3"]
-
-CMD ["-m", "swagger_server"]
+CMD ["python3", "-m", "swagger_server"]
