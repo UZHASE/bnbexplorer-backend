@@ -1,3 +1,6 @@
+# Install swagger-ui before connexion.
+connexion[swagger-ui]
+
 connexion == 2.6.0
 python_dateutil == 2.6.0
 setuptools >= 21.0.0
