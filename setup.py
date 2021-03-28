@@ -18,10 +18,10 @@ REQUIRES = ["connexion"]
 setup(
     name=NAME,
     version=VERSION,
-    description="Swagger Petstore",
-    author_email="apiteam@swagger.io",
+    description="NYC AirBnB Explorer",
+    author_email="",
     url="",
-    keywords=["Swagger", "Swagger Petstore"],
+    keywords=["Swagger", "NYC AirBnB Explorer"],
     install_requires=REQUIRES,
     packages=find_packages(),
     package_data={'': ['swagger/swagger.yaml']},
@@ -29,7 +29,7 @@ setup(
     entry_points={
         'console_scripts': ['swagger_server=swagger_server.__main__:main']},
     long_description="""\
-    This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key &#x60;special-key&#x60; to test the authorization     filters.
+    REST API for Advanced Software Engineering FS21 Project
     """
 )
 
