@@ -1,477 +1,541 @@
----
-swagger: "2.0"
+openapi: 3.0.3
 info:
-  description: "REST API for Advanced Software Engineering FS21 Project"
-  version: "0.1.0"
-  title: "NYC AirBnB Explorer"
-basePath: "/api/v1/airbnb-explorer"
+  title: NYC AirBnB Explorer
+  description: REST API for Advanced Software Engineering FS21 Project
+  version: 0.1.0
+servers:
+- url: /api/v1/airbnb-explorer
 tags:
-- name: "Listings"
-  description: "Endpoints to access AirBnB Listings"
-- name: "Hosts"
-  description: "Endpoints to access AirBnB Hosts"
-- name: "Layers"
-  description: "Endpoints to access AirBnB Listing geolocations for Layers"
-- name: "Recommendations"
-  description: "Endpoints for AirBnB Listing Recommendations"
-schemes:
-- "https"
-- "http"
+- name: Listings
+  description: Endpoints to access AirBnB Listings
+- name: Hosts
+  description: Endpoints to access AirBnB Hosts
+- name: Layers
+  description: Endpoints to access AirBnB Listing geolocations for Layers
+- name: Recommendations
+  description: Endpoints for AirBnB Listing Recommendations
 paths:
   /listings/{listingId}:
     get:
       tags:
-      - "Listings"
-      summary: "Find Listing by ID"
-      description: "Returns a single Listing matching the given ID"
-      operationId: "find_listing_by_id"
-      produces:
-      - "application/json"
-      - "application/xml"
+      - Listings
+      summary: Find Listing by ID
+      description: Returns a single Listing matching the given ID
+      operationId: find_listing_by_id
       parameters:
-      - name: "listingId"
-        in: "path"
-        description: "ID of Listing to return"
+      - name: listingId
+        in: path
+        description: ID of Listing to return
         required: true
-        type: "integer"
+        style: simple
+        explode: false
+        schema:
+          type: integer
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Listing"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
         "400":
-          description: "Invalid ID supplied"
+          description: Invalid ID supplied
         "404":
-          description: "Listing not found"
-      x-swagger-router-controller: "swagger_server.controllers.listings_controller"
+          description: Listing not found
+      x-openapi-router-controller: swagger_server.controllers.listings_controller
   /listings:
     get:
       tags:
-      - "Listings"
-      summary: "Retrieve NYC AirBnB listings"
-      description: "Returns a list of AirBnB Listings based on the provided filter\
-        \ criteria"
-      operationId: "find_listings"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/json"
-      - "application/xml"
+      - Listings
+      summary: Retrieve NYC AirBnB listings
+      description: Returns a list of AirBnB Listings based on the provided filter
+        criteria
+      operationId: find_listings
       parameters:
-      - name: "listingName"
-        in: "query"
-        description: "Name to match Listings (can bei either exact match or not)"
+      - name: listingName
+        in: query
+        description: Name to match Listings (can bei either exact match or not)
         required: false
-        type: "integer"
-      - name: "hostId"
-        in: "query"
-        description: "Filter Listings based on hostId"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: hostId
+        in: query
+        description: Filter Listings based on hostId
         required: false
-        type: "integer"
-      - name: "hostName"
-        in: "query"
-        description: "Name to match Hosts of Listings (can bei either exact match\
-          \ or not)"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: hostName
+        in: query
+        description: Name to match Hosts of Listings (can bei either exact match or
+          not)
         required: false
-        type: "string"
-      - name: "location"
-        in: "query"
-        description: "Filter Listings by their location"
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: location
+        in: query
+        description: Filter Listings by their location
         required: false
-        type: "string"
-        enum:
-        - "Manhattan"
-        - "Brooklyn"
-      - name: "area"
-        in: "query"
-        description: "Filter Listings by their area"
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Manhattan
+          - Brooklyn
+      - name: area
+        in: query
+        description: Filter Listings by their area
         required: false
-        type: "string"
-        enum:
-        - "Kensington"
-        - "Midtown"
-      - name: "priceMin"
-        in: "query"
-        description: "Filter Listings by minimum price"
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Kensington
+          - Midtown
+      - name: priceMin
+        in: query
+        description: Filter Listings by minimum price
         required: false
-        type: "integer"
-      - name: "priceMax"
-        in: "query"
-        description: "Filter Listings by maximum price"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: priceMax
+        in: query
+        description: Filter Listings by maximum price
         required: false
-        type: "integer"
-      - name: "minNights"
-        in: "query"
-        description: "Filter Listings by minimum nights"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: minNights
+        in: query
+        description: Filter Listings by minimum nights
         required: false
-        type: "integer"
-      - name: "availability"
-        in: "query"
-        description: "Filter Listings by their availability"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: availability
+        in: query
+        description: Filter Listings by their availability
         required: false
-        type: "integer"
-        enum:
-        - 0
-        - 129
-        - 365
-      - name: "listingsPerHost"
-        in: "query"
-        description: "Filter Listings by the number of Listings per Host"
+        style: form
+        explode: true
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 129
+          - 365
+      - name: listingsPerHost
+        in: query
+        description: Filter Listings by the number of Listings per Host
         required: false
-        type: "integer"
-      - name: "roomType"
-        in: "query"
-        description: "Filter Listings by room type"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: roomType
+        in: query
+        description: Filter Listings by room type
         required: false
-        type: "string"
-        enum:
-        - "Private Room"
-        - "Entire Home/Apt"
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Private Room
+          - Entire Home/Apt
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Listing"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Listing'
+                x-content-type: application/json
         "400":
-          description: "Invalid input"
+          description: Invalid input
         "404":
-          description: "Listing not found"
-      x-swagger-router-controller: "swagger_server.controllers.listings_controller"
+          description: Listing not found
+      x-openapi-router-controller: swagger_server.controllers.listings_controller
   /listings/{listingId}/reviews:
     get:
       tags:
-      - "Listings"
-      summary: "Find Reviews for a given Listing"
-      description: "Returns all Reviews for a single Listing matching the given ID"
-      operationId: "find_reviews_for_listing"
-      produces:
-      - "application/json"
-      - "application/xml"
+      - Listings
+      summary: Find Reviews for a given Listing
+      description: Returns all Reviews for a single Listing matching the given ID
+      operationId: find_reviews_for_listing
       parameters:
-      - name: "listingId"
-        in: "path"
-        description: "ID of Listing to return Reviews"
+      - name: listingId
+        in: path
+        description: ID of Listing to return Reviews
         required: true
-        type: "integer"
+        style: simple
+        explode: false
+        schema:
+          type: integer
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Review"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+                x-content-type: application/json
         "400":
-          description: "Invalid ID supplied"
+          description: Invalid ID supplied
         "404":
-          description: "Listing not found"
-      x-swagger-router-controller: "swagger_server.controllers.listings_controller"
+          description: Listing not found
+      x-openapi-router-controller: swagger_server.controllers.listings_controller
   /hosts/{hostId}:
     get:
       tags:
-      - "Hosts"
-      summary: "Find Hosts by ID"
-      description: "Returns a single Host matching the given ID"
-      operationId: "find_host_by_id"
-      produces:
-      - "application/json"
-      - "application/xml"
+      - Hosts
+      summary: Find Hosts by ID
+      description: Returns a single Host matching the given ID
+      operationId: find_host_by_id
       parameters:
-      - name: "hostId"
-        in: "path"
-        description: "ID of Host to return"
+      - name: hostId
+        in: path
+        description: ID of Host to return
         required: true
-        type: "integer"
+        style: simple
+        explode: false
+        schema:
+          type: integer
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Host"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Host'
+                x-content-type: application/json
         "400":
-          description: "Invalid ID supplied"
+          description: Invalid ID supplied
         "404":
-          description: "Host not found"
-      x-swagger-router-controller: "swagger_server.controllers.hosts_controller"
+          description: Host not found
+      x-openapi-router-controller: swagger_server.controllers.hosts_controller
   /layers/crime:
     get:
       tags:
-      - "Layers"
-      summary: "Retrieve Crime Layer details"
-      description: "Returns details to diyplay Crime Layer (amount per neighbourhood)"
-      operationId: "find_crime_layer"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters: []
+      - Layers
+      summary: Retrieve Crime Layer details
+      description: Returns details to diyplay Crime Layer (amount per neighbourhood)
+      operationId: find_crime_layer
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Layer"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Layer'
         "400":
-          description: "Invalid ID supplied"
+          description: Invalid ID supplied
         "500":
-          description: "Internal Server Error"
-      x-swagger-router-controller: "swagger_server.controllers.layers_controller"
+          description: Internal Server Error
+      x-openapi-router-controller: swagger_server.controllers.layers_controller
   /layers/complaints:
     get:
       tags:
-      - "Layers"
-      summary: "Retrieve Complaints Layer details"
-      description: "Returns details to diyplay Complaints Layer (amount per neighbourhood)"
-      operationId: "find_comlaints_layer"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters: []
+      - Layers
+      summary: Retrieve Complaints Layer details
+      description: Returns details to diyplay Complaints Layer (amount per neighbourhood)
+      operationId: find_complaints_layer
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Layer"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Layer'
         "500":
-          description: "Internal Server Error"
-      x-swagger-router-controller: "swagger_server.controllers.layers_controller"
+          description: Internal Server Error
+      x-openapi-router-controller: swagger_server.controllers.layers_controller
   /layers/health:
     get:
       tags:
-      - "Layers"
-      summary: "Retrieve Health Layer details"
-      description: "Returns details to diyplay Health Layer (amount per neighbourhood)"
-      operationId: "find_health_layer"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters: []
+      - Layers
+      summary: Retrieve Health Layer details
+      description: Returns details to diyplay Health Layer (amount per neighbourhood)
+      operationId: find_health_layer
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/Layer"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Layer'
         "500":
-          description: "Internal Server Error"
-      x-swagger-router-controller: "swagger_server.controllers.layers_controller"
+          description: Internal Server Error
+      x-openapi-router-controller: swagger_server.controllers.layers_controller
   /listings/attractions:
     get:
       tags:
-      - "Recommendations"
-      summary: "Recommend closest AirBnBs based on a list of Attractions"
-      description: "Returns a list of recommended Listings"
-      operationId: "recommend_listings_for_attractions"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters: []
+      - Recommendations
+      summary: Recommend closest AirBnBs based on a list of Attractions
+      description: Returns a list of recommended Listings
+      operationId: recommend_listings_for_attractions
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Listing"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Listing'
+                x-content-type: application/json
         "500":
-          description: "Internal Server Error"
-      x-swagger-router-controller: "swagger_server.controllers.recommendations_controller"
+          description: Internal Server Error
+      x-openapi-router-controller: swagger_server.controllers.recommendations_controller
   /listings/recommendations:
     get:
       tags:
-      - "Recommendations"
-      summary: "Recommend AirBnBs based on provided filter criteria"
-      description: "Returns a list of recommended Listings"
-      operationId: "recommend_listings"
-      produces:
-      - "application/json"
-      - "application/xml"
+      - Recommendations
+      summary: Recommend AirBnBs based on provided filter criteria
+      description: Returns a list of recommended Listings
+      operationId: recommend_listings
       parameters:
-      - name: "listingName"
-        in: "query"
-        description: "Name to match Listings (can bei either exact match or not)"
+      - name: listingName
+        in: query
+        description: Name to match Listings (can bei either exact match or not)
         required: false
-        type: "integer"
-      - name: "hostName"
-        in: "query"
-        description: "Name to match Hosts of Listings (can bei either exact match\
-          \ or not)"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: hostName
+        in: query
+        description: Name to match Hosts of Listings (can bei either exact match or
+          not)
         required: false
-        type: "string"
-      - name: "location"
-        in: "query"
-        description: "Filter Listings by their location"
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: location
+        in: query
+        description: Filter Listings by their location
         required: false
-        type: "string"
-        enum:
-        - "Manhattan"
-        - "Brooklyn"
-      - name: "area"
-        in: "query"
-        description: "Filter Listings by their area"
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Manhattan
+          - Brooklyn
+      - name: area
+        in: query
+        description: Filter Listings by their area
         required: false
-        type: "string"
-        enum:
-        - "Kensington"
-        - "Midtown"
-      - name: "priceMin"
-        in: "query"
-        description: "Filter Listings by minimum price"
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Kensington
+          - Midtown
+      - name: priceMin
+        in: query
+        description: Filter Listings by minimum price
         required: false
-        type: "integer"
-      - name: "priceMax"
-        in: "query"
-        description: "Filter Listings by maximum price"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: priceMax
+        in: query
+        description: Filter Listings by maximum price
         required: false
-        type: "integer"
-      - name: "minNights"
-        in: "query"
-        description: "Filter Listings by minimum nights"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: minNights
+        in: query
+        description: Filter Listings by minimum nights
         required: false
-        type: "integer"
-      - name: "availability"
-        in: "query"
-        description: "Filter Listings by their availability"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: availability
+        in: query
+        description: Filter Listings by their availability
         required: false
-        type: "integer"
-        enum:
-        - 0
-        - 129
-        - 365
-      - name: "listingsPerHost"
-        in: "query"
-        description: "Filter Listings by the number of Listings per Host"
+        style: form
+        explode: true
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 129
+          - 365
+      - name: listingsPerHost
+        in: query
+        description: Filter Listings by the number of Listings per Host
         required: false
-        type: "integer"
-      - name: "roomType"
-        in: "query"
-        description: "Filter Listings by room type"
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: roomType
+        in: query
+        description: Filter Listings by room type
         required: false
-        type: "string"
-        enum:
-        - "Private Room"
-        - "Entire Home/Apt"
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - Private Room
+          - Entire Home/Apt
       responses:
         "200":
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Listing"
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Listing'
+                x-content-type: application/json
         "500":
-          description: "Internal Server Error"
-      x-swagger-router-controller: "swagger_server.controllers.recommendations_controller"
-definitions:
-  Listing:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      name:
-        type: "string"
-      host:
-        $ref: "#/definitions/Host"
-      neighbourhood:
-        type: "string"
-        enum:
-        - "Brooklyn"
-        - "Manhattan"
-      area:
-        type: "string"
-        enum:
-        - "Kensington"
-        - "Midtown"
-      latitude:
-        type: "number"
-      longitude:
-        type: "number"
-      roomType:
-        type: "string"
-        enum:
-        - "Private Room"
-        - "Entire Home/Apt"
-      price:
-        type: "integer"
-      minNights:
-        type: "integer"
-      numOfReviews:
-        type: "integer"
-      availability:
-        type: "integer"
-    example:
-      area: "Kensington"
-      numOfReviews: 9
-      minNights: 7
-      neighbourhood: "Brooklyn"
-      price: 2
-      latitude: 5.962133916683182377482808078639209270477294921875
-      name: "name"
-      host:
-        name: "name"
+          description: Internal Server Error
+      x-openapi-router-controller: swagger_server.controllers.recommendations_controller
+components:
+  schemas:
+    Listing:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        host:
+          $ref: '#/components/schemas/Host'
+        neighbourhood:
+          type: string
+          enum:
+          - Brooklyn
+          - Manhattan
+        area:
+          type: string
+          enum:
+          - Kensington
+          - Midtown
+        latitude:
+          type: number
+        longitude:
+          type: number
+        roomType:
+          type: string
+          enum:
+          - Private Room
+          - Entire Home/Apt
+        price:
+          type: integer
+        minNights:
+          type: integer
+        numOfReviews:
+          type: integer
+        availability:
+          type: integer
+          enum:
+          - 1
+          - 100
+          - 365
+      example:
+        area: Kensington
+        numOfReviews: 9
+        minNights: 7
+        neighbourhood: Brooklyn
+        price: 2
+        latitude: 5.962133916683182377482808078639209270477294921875
+        name: name
+        host:
+          name: name
+          numOfListings: 1
+          id: 6
+        id: 0
+        availability: 3
+        roomType: Private Room
+        longitude: 5.63737665663332876420099637471139430999755859375
+    Host:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        numOfListings:
+          type: integer
+      example:
+        name: name
         numOfListings: 1
         id: 6
-      id: 0
-      availability: 3
-      roomType: "Private Room"
-      longitude: 5.63737665663332876420099637471139430999755859375
-  Host:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      name:
-        type: "string"
-      numOfListings:
-        type: "integer"
-    example:
-      name: "name"
-      numOfListings: 1
-      id: 6
-  Review:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      listingId:
-        type: "integer"
-      text:
-        type: "string"
-    example:
-      id: 0
-      listingId: 6
-      text: "text"
-  Layer:
-    type: "object"
-    properties:
-      type:
-        type: "string"
-        enum:
-        - "crime"
-        - "complaints"
-        - "health"
-      entries:
-        type: "array"
-        items:
-          $ref: "#/definitions/LayerEntry"
-    example:
-      entries:
-      - latitude: 6.02745618307040320615897144307382404804229736328125
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+        listingId:
+          type: integer
+        text:
+          type: string
+      example:
+        id: 0
+        listingId: 6
+        text: text
+    Layer:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - crime
+          - complaints
+          - health
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LayerEntry'
+      example:
+        entries:
+        - latitude: 6.02745618307040320615897144307382404804229736328125
+          id: 0
+          longitude: 1.46581298050294517310021547018550336360931396484375
+        - latitude: 6.02745618307040320615897144307382404804229736328125
+          id: 0
+          longitude: 1.46581298050294517310021547018550336360931396484375
+        type: crime
+    LayerEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        latitude:
+          type: number
+        longitude:
+          type: number
+      example:
+        latitude: 6.02745618307040320615897144307382404804229736328125
         id: 0
         longitude: 1.46581298050294517310021547018550336360931396484375
-      - latitude: 6.02745618307040320615897144307382404804229736328125
-        id: 0
-        longitude: 1.46581298050294517310021547018550336360931396484375
-      type: "crime"
-  LayerEntry:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-      latitude:
-        type: "number"
-      longitude:
-        type: "number"
-    example:
-      latitude: 6.02745618307040320615897144307382404804229736328125
-      id: 0
-      longitude: 1.46581298050294517310021547018550336360931396484375
+

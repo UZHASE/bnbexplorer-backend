@@ -14,7 +14,6 @@ class Host(Model):
 
     Do not edit the class manually.
     """
-
     def __init__(self, id: int=None, name: str=None, num_of_listings: int=None):  # noqa: E501
         """Host - a model defined in Swagger
 
@@ -36,7 +35,6 @@ class Host(Model):
             'name': 'name',
             'num_of_listings': 'numOfListings'
         }
-
         self._id = id
         self._name = name
         self._num_of_listings = num_of_listings

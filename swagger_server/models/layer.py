@@ -5,8 +5,8 @@ from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict  # noqa: F401
 
-from swagger_server.models.layer_entry import LayerEntry
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.layer_entry import LayerEntry  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,7 +15,6 @@ class Layer(Model):
 
     Do not edit the class manually.
     """
-
     def __init__(self, type: str=None, entries: List[LayerEntry]=None):  # noqa: E501
         """Layer - a model defined in Swagger
 
@@ -33,7 +32,6 @@ class Layer(Model):
             'type': 'type',
             'entries': 'entries'
         }
-
         self._type = type
         self._entries = entries
 

@@ -14,7 +14,6 @@ class Review(Model):
 
     Do not edit the class manually.
     """
-
     def __init__(self, id: int=None, listing_id: int=None, text: str=None):  # noqa: E501
         """Review - a model defined in Swagger
 
@@ -36,7 +35,6 @@ class Review(Model):
             'listing_id': 'listingId',
             'text': 'text'
         }
-
         self._id = id
         self._listing_id = listing_id
         self._text = text

@@ -12,13 +12,13 @@ from swagger_server.test import BaseTestCase
 class TestLayersController(BaseTestCase):
     """LayersController integration test stubs"""
 
-    def test_find_comlaints_layer(self):
-        """Test case for find_comlaints_layer
+    def test_find_complaints_layer(self):
+        """Test case for find_complaints_layer
 
         Retrieve Complaints Layer details
         """
         response = self.client.open(
-            '/api/v1/airbnb-explorer/layers/complaints',
+            '/layers/complaints',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -29,7 +29,7 @@ class TestLayersController(BaseTestCase):
         Retrieve Crime Layer details
         """
         response = self.client.open(
-            '/api/v1/airbnb-explorer/layers/crime',
+            '/layers/crime',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -40,7 +40,7 @@ class TestLayersController(BaseTestCase):
         Retrieve Health Layer details
         """
         response = self.client.open(
-            '/api/v1/airbnb-explorer/layers/health',
+            '/layers/health',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

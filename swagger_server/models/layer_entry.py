@@ -14,7 +14,6 @@ class LayerEntry(Model):
 
     Do not edit the class manually.
     """
-
     def __init__(self, id: int=None, latitude: float=None, longitude: float=None):  # noqa: E501
         """LayerEntry - a model defined in Swagger
 
@@ -36,7 +35,6 @@ class LayerEntry(Model):
             'latitude': 'latitude',
             'longitude': 'longitude'
         }
-
         self._id = id
         self._latitude = latitude
         self._longitude = longitude

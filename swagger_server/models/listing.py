@@ -5,8 +5,8 @@ from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict  # noqa: F401
 
-from swagger_server.models.host import Host
 from swagger_server.models.base_model_ import Model
+from swagger_server.models.host import Host  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,7 +15,6 @@ class Listing(Model):
 
     Do not edit the class manually.
     """
-
     def __init__(self, id: int=None, name: str=None, host: Host=None, neighbourhood: str=None, area: str=None, latitude: float=None, longitude: float=None, room_type: str=None, price: int=None, min_nights: int=None, num_of_reviews: int=None, availability: int=None):  # noqa: E501
         """Listing - a model defined in Swagger
 
@@ -73,7 +72,6 @@ class Listing(Model):
             'num_of_reviews': 'numOfReviews',
             'availability': 'availability'
         }
-
         self._id = id
         self._name = name
         self._host = host
@@ -365,5 +363,11 @@ class Listing(Model):
         :param availability: The availability of this Listing.
         :type availability: int
         """
+        allowed_values = ["1", "100", "365"]  # noqa: E501
+        if availability not in allowed_values:
+            raise ValueError(
+                "Invalid value for `availability` ({0}), must be one of {1}"
+                .format(availability, allowed_values)
+            )
 
         self._availability = availability

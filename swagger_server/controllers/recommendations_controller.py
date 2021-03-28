@@ -5,31 +5,31 @@ from swagger_server.models.listing import Listing  # noqa: E501
 from swagger_server import util
 
 
-def recommend_listings(listingName=None, hostName=None, location=None, area=None, priceMin=None, priceMax=None, minNights=None, availability=None, listingsPerHost=None, roomType=None):  # noqa: E501
+def recommend_listings(listing_name=None, host_name=None, location=None, area=None, price_min=None, price_max=None, min_nights=None, availability=None, listings_per_host=None, room_type=None):  # noqa: E501
     """Recommend AirBnBs based on provided filter criteria
 
     Returns a list of recommended Listings # noqa: E501
 
-    :param listingName: Name to match Listings (can bei either exact match or not)
-    :type listingName: int
-    :param hostName: Name to match Hosts of Listings (can bei either exact match or not)
-    :type hostName: str
+    :param listing_name: Name to match Listings (can bei either exact match or not)
+    :type listing_name: int
+    :param host_name: Name to match Hosts of Listings (can bei either exact match or not)
+    :type host_name: str
     :param location: Filter Listings by their location
     :type location: str
     :param area: Filter Listings by their area
     :type area: str
-    :param priceMin: Filter Listings by minimum price
-    :type priceMin: int
-    :param priceMax: Filter Listings by maximum price
-    :type priceMax: int
-    :param minNights: Filter Listings by minimum nights
-    :type minNights: int
+    :param price_min: Filter Listings by minimum price
+    :type price_min: int
+    :param price_max: Filter Listings by maximum price
+    :type price_max: int
+    :param min_nights: Filter Listings by minimum nights
+    :type min_nights: int
     :param availability: Filter Listings by their availability
     :type availability: int
-    :param listingsPerHost: Filter Listings by the number of Listings per Host
-    :type listingsPerHost: int
-    :param roomType: Filter Listings by room type
-    :type roomType: str
+    :param listings_per_host: Filter Listings by the number of Listings per Host
+    :type listings_per_host: int
+    :param room_type: Filter Listings by room type
+    :type room_type: str
 
     :rtype: List[Listing]
     """

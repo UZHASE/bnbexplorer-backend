@@ -5,7 +5,7 @@ from swagger_server.models.layer import Layer  # noqa: E501
 from swagger_server import util
 
 
-def find_comlaints_layer():  # noqa: E501
+def find_complaints_layer():  # noqa: E501
     """Retrieve Complaints Layer details
 
     Returns details to diyplay Complaints Layer (amount per neighbourhood) # noqa: E501
