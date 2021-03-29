@@ -17,20 +17,21 @@ class TestRecommendationsController(BaseTestCase):
 
         Recommend AirBnBs based on provided filter criteria
         """
-        query_string = [('listing_name', 56),
-                        ('host_name', 'host_name_example'),
-                        ('location', 'location_example'),
-                        ('area', 'area_example'),
+        query_string = [('listing_name', 'Test'),
+                        ('host_id', 56),
+                        ('host_name', 'Host'),
+                        ('location', 'Manhattan'),
+                        ('area', 'Midtown'),
                         ('price_min', 56),
                         ('price_max', 56),
                         ('min_nights', 56),
-                        ('availability', 56),
+                        ('availability', 365),
                         ('listings_per_host', 56),
-                        ('room_type', 'room_type_example')]
+                        ('room_type', 'Single Room')]
         response = self.client.open(
-            '/listings/recommendations',
+            '/api/v1/airbnb-explorer/listings/recommendations',
             method='GET',
-            query_string=query_string)
+            query_string=str(query_string))
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -40,7 +41,7 @@ class TestRecommendationsController(BaseTestCase):
         Recommend closest AirBnBs based on a list of Attractions
         """
         response = self.client.open(
-            '/listings/attractions',
+            '/api/v1/airbnb-explorer/listings/attractions',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

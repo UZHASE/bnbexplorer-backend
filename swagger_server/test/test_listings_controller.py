@@ -19,7 +19,7 @@ class TestListingsController(BaseTestCase):
         Find Listing by ID
         """
         response = self.client.open(
-            '/listings/{listingId}'.format(listing_id=56),
+            '/api/v1/airbnb-explorer/listings/{listingId}'.format(listingId=56),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -29,21 +29,21 @@ class TestListingsController(BaseTestCase):
 
         Retrieve NYC AirBnB listings
         """
-        query_string = [('listing_name', 56),
+        query_string = [('listing_name', 'Test'),
                         ('host_id', 56),
-                        ('host_name', 'host_name_example'),
-                        ('location', 'location_example'),
-                        ('area', 'area_example'),
+                        ('host_name', 'Host'),
+                        ('location', 'Manhattan'),
+                        ('area', 'Midtown'),
                         ('price_min', 56),
                         ('price_max', 56),
                         ('min_nights', 56),
-                        ('availability', 56),
+                        ('availability', 365),
                         ('listings_per_host', 56),
-                        ('room_type', 'room_type_example')]
+                        ('room_type', 'Single Room')]
         response = self.client.open(
-            '/listings',
+            '/api/v1/airbnb-explorer/listings',
             method='GET',
-            query_string=query_string)
+            query_string=str(query_string))
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -53,7 +53,7 @@ class TestListingsController(BaseTestCase):
         Find Reviews for a given Listing
         """
         response = self.client.open(
-            '/listings/{listingId}/reviews'.format(listing_id=56),
+            '/api/v1/airbnb-explorer/listings/{listingId}/reviews'.format(listingId=56),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

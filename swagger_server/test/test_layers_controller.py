@@ -18,7 +18,7 @@ class TestLayersController(BaseTestCase):
         Retrieve Complaints Layer details
         """
         response = self.client.open(
-            '/layers/complaints',
+            '/api/v1/airbnb-explorer/layers/complaints',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -29,7 +29,7 @@ class TestLayersController(BaseTestCase):
         Retrieve Crime Layer details
         """
         response = self.client.open(
-            '/layers/crime',
+            '/api/v1/airbnb-explorer/layers/crime',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -40,7 +40,7 @@ class TestLayersController(BaseTestCase):
         Retrieve Health Layer details
         """
         response = self.client.open(
-            '/layers/health',
+            '/api/v1/airbnb-explorer/layers/health',
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

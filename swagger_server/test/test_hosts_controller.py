@@ -18,7 +18,7 @@ class TestHostsController(BaseTestCase):
         Find Hosts by ID
         """
         response = self.client.open(
-            '/hosts/{hostId}'.format(host_id=56),
+            '/api/v1/airbnb-explorer/hosts/{hostId}'.format(hostId=56),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
