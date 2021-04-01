@@ -67,9 +67,7 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
     :rtype: List[Listing]
     """
 
-    listing_repo = Listing_Repository()
-
-    return jsonify(listing_repo.get_all())
+    return jsonify(Listing_Repository().get_all())
 
 
 def find_reviews_for_listing(listing_id):  # noqa: E501

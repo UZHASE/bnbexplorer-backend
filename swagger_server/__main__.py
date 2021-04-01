@@ -8,7 +8,7 @@ import sqlite3
 
 
 def main():
-    con = sqlite3.connect(os.environ.get('DB_NAME', 'database/bnbexplorer.sqlite'))
+    con = sqlite3.connect('database/bnbexplorer.sqlite')
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'NYC AirBnB Explorer'}, pythonic_params=True)
