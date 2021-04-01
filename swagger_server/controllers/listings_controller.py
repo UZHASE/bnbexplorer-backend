@@ -2,8 +2,8 @@ import connexion
 import six
 from flask import jsonify
 
-from swagger_server.models.listing import Listing  # noqa: E501
-from swagger_server.models.review import Review  # noqa: E501
+from swagger_server.models.listing import Listing as Listing_Model
+from swagger_server.models.review import Review as Review_Model
 from swagger_server.repositories.listing_repsotory import Listing as Listing_Repository
 from swagger_server import util
 
@@ -18,8 +18,7 @@ def find_listing_by_id(listing_id):  # noqa: E501
     :rtype: Listing
     """
 
-
-    listing = Listing(
+    listing = Listing_Model(
         listing_id,
         'Listing',
         'Host',
@@ -80,19 +79,19 @@ def find_reviews_for_listing(listing_id):  # noqa: E501
 
     :rtype: List[Review]
     """
-    review1 = Review(
+    review1 = Review_Model(
         1,
         listing_id,
         'Very nice!'
     )
 
-    review2 = Review(
+    review2 = Review_Model(
         2,
         listing_id,
         'Good!'
     )
 
-    review3 = Review(
+    review3 = Review_Model(
         3,
         listing_id,
         'Worst AirBnB ever!'
