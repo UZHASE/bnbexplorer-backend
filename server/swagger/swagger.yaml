@@ -42,7 +42,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Listing not found
-      x-openapi-router-controller: swagger_server.controllers.listings_controller
+      x-openapi-router-controller: server.controllers.listings_controller
   /listings:
     get:
       tags:
@@ -155,7 +155,7 @@ paths:
           description: Invalid input
         "404":
           description: Listing not found
-      x-openapi-router-controller: swagger_server.controllers.listings_controller
+      x-openapi-router-controller: server.controllers.listings_controller
   /listings/{listingId}/reviews:
     get:
       tags:
@@ -186,7 +186,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Listing not found
-      x-openapi-router-controller: swagger_server.controllers.listings_controller
+      x-openapi-router-controller: server.controllers.listings_controller
   /hosts/{hostId}:
     get:
       tags:
@@ -217,7 +217,7 @@ paths:
           description: Invalid ID supplied
         "404":
           description: Host not found
-      x-openapi-router-controller: swagger_server.controllers.hosts_controller
+      x-openapi-router-controller: server.controllers.hosts_controller
   /layers/crime:
     get:
       tags:
@@ -236,7 +236,7 @@ paths:
           description: Invalid ID supplied
         "500":
           description: Internal Server Error
-      x-openapi-router-controller: swagger_server.controllers.layers_controller
+      x-openapi-router-controller: server.controllers.layers_controller
   /layers/complaints:
     get:
       tags:
@@ -253,7 +253,7 @@ paths:
                 $ref: '#/components/schemas/Layer'
         "500":
           description: Internal Server Error
-      x-openapi-router-controller: swagger_server.controllers.layers_controller
+      x-openapi-router-controller: server.controllers.layers_controller
   /layers/health:
     get:
       tags:
@@ -270,7 +270,7 @@ paths:
                 $ref: '#/components/schemas/Layer'
         "500":
           description: Internal Server Error
-      x-openapi-router-controller: swagger_server.controllers.layers_controller
+      x-openapi-router-controller: server.controllers.layers_controller
   /listings/attractions:
     get:
       tags:
@@ -290,7 +290,7 @@ paths:
                 x-content-type: application/json
         "500":
           description: Internal Server Error
-      x-openapi-router-controller: swagger_server.controllers.recommendations_controller
+      x-openapi-router-controller: server.controllers.recommendations_controller
   /listings/recommendations:
     get:
       tags:
@@ -392,7 +392,7 @@ paths:
                 x-content-type: application/json
         "500":
           description: Internal Server Error
-      x-openapi-router-controller: swagger_server.controllers.recommendations_controller
+      x-openapi-router-controller: server.controllers.recommendations_controller
 components:
   schemas:
     Listing:

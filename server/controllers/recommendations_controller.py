@@ -1,8 +1,8 @@
 import connexion
 import six
 
-from swagger_server.models.listing import Listing  # noqa: E501
-from swagger_server import util
+from server.models.listing import Listing  # noqa: E501
+from server import util
 
 
 def recommend_listings(listing_name=None, host_name=None, location=None, area=None, price_min=None, price_max=None, min_nights=None, availability=None, listings_per_host=None, room_type=None):  # noqa: E501
