@@ -85,9 +85,6 @@ paths:
         explode: true
         schema:
           type: string
-          enum:
-          - Manhattan
-          - Brooklyn
       - name: area
         in: query
         description: Filter Listings by their area
@@ -96,9 +93,6 @@ paths:
         explode: true
         schema:
           type: string
-          enum:
-          - Kensington
-          - Midtown
       - name: priceMin
         in: query
         description: Filter Listings by minimum price
@@ -131,10 +125,6 @@ paths:
         explode: true
         schema:
           type: integer
-          enum:
-          - 0
-          - 129
-          - 365
       - name: listingsPerHost
         in: query
         description: Filter Listings by the number of Listings per Host
@@ -151,9 +141,6 @@ paths:
         explode: true
         schema:
           type: string
-          enum:
-          - Private Room
-          - Entire Home/Apt
       responses:
         "200":
           description: Successful operation
@@ -337,9 +324,6 @@ paths:
         explode: true
         schema:
           type: string
-          enum:
-          - Manhattan
-          - Brooklyn
       - name: area
         in: query
         description: Filter Listings by their area
@@ -348,9 +332,6 @@ paths:
         explode: true
         schema:
           type: string
-          enum:
-          - Kensington
-          - Midtown
       - name: priceMin
         in: query
         description: Filter Listings by minimum price
@@ -383,10 +364,6 @@ paths:
         explode: true
         schema:
           type: integer
-          enum:
-          - 0
-          - 129
-          - 365
       - name: listingsPerHost
         in: query
         description: Filter Listings by the number of Listings per Host
@@ -403,9 +380,6 @@ paths:
         explode: true
         schema:
           type: string
-          enum:
-          - Private Room
-          - Entire Home/Apt
       responses:
         "200":
           description: Successful operation
@@ -432,23 +406,14 @@ components:
           $ref: '#/components/schemas/Host'
         neighbourhood:
           type: string
-          enum:
-          - Brooklyn
-          - Manhattan
         area:
           type: string
-          enum:
-          - Kensington
-          - Midtown
         latitude:
           type: number
         longitude:
           type: number
         roomType:
           type: string
-          enum:
-          - Private Room
-          - Entire Home/Apt
         price:
           type: integer
         minNights:
@@ -457,10 +422,6 @@ components:
           type: integer
         availability:
           type: integer
-          enum:
-          - 1
-          - 100
-          - 365
       example:
         area: Kensington
         numOfReviews: 9
