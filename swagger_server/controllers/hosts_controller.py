@@ -6,6 +6,7 @@ from flask import jsonify
 
 from swagger_server.models.host import Host  # noqa: E501
 from swagger_server import util
+from swagger_server.repositories.host_repository import Host as Host_Repository
 
 
 def find_host_by_id(host_id):  # noqa: E501
@@ -18,5 +19,4 @@ def find_host_by_id(host_id):  # noqa: E501
 
     :rtype: List[Host]
     """
-    host = Host(host_id, 'Host', random.randint(0, 10))
-    return jsonify(host)
+    return jsonify(Host_Repository().get_by_id(host_id))

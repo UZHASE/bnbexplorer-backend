@@ -177,12 +177,6 @@ class Listing(Model):
         :param neighbourhood: The neighbourhood of this Listing.
         :type neighbourhood: str
         """
-        allowed_values = ["Brooklyn", "Manhattan"]  # noqa: E501
-        if neighbourhood not in allowed_values:
-            raise ValueError(
-                "Invalid value for `neighbourhood` ({0}), must be one of {1}"
-                .format(neighbourhood, allowed_values)
-            )
 
         self._neighbourhood = neighbourhood
 
@@ -204,12 +198,6 @@ class Listing(Model):
         :param area: The area of this Listing.
         :type area: str
         """
-        allowed_values = ["Kensington", "Midtown"]  # noqa: E501
-        if area not in allowed_values:
-            raise ValueError(
-                "Invalid value for `area` ({0}), must be one of {1}"
-                .format(area, allowed_values)
-            )
 
         self._area = area
 
@@ -273,12 +261,6 @@ class Listing(Model):
         :param room_type: The room_type of this Listing.
         :type room_type: str
         """
-        allowed_values = ["Private Room", "Entire Home/Apt"]  # noqa: E501
-        if room_type not in allowed_values:
-            raise ValueError(
-                "Invalid value for `room_type` ({0}), must be one of {1}"
-                .format(room_type, allowed_values)
-            )
 
         self._room_type = room_type
 
@@ -363,11 +345,5 @@ class Listing(Model):
         :param availability: The availability of this Listing.
         :type availability: int
         """
-        allowed_values = ["1", "100", "365"]  # noqa: E501
-        if availability not in allowed_values:
-            raise ValueError(
-                "Invalid value for `availability` ({0}), must be one of {1}"
-                .format(availability, allowed_values)
-            )
 
         self._availability = availability
