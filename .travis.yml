@@ -9,3 +9,8 @@ script:
   # other script steps might be done before running the actual analysis
   - pytest --cov=server && coverage xml
   - sonar-scanner
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never
