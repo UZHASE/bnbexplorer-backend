@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.8"
+  - "3.9"
 
 deploy:
   provider: heroku
@@ -20,13 +20,11 @@ install:
   - pip install -r test-requirements.txt
 script:
   # other script steps might be done before running the actual analysis
-  - pytest --cov=server && coverage xml
+  - pytest --cov=server --rootdir=. && coverage xml # set rootdir because of relative path for SQLite connections
   - sonar-scanner
 
 notifications:
-  email:
-    on_success: never
-    on_failure: never
+  email: false
 
 env:
   global:
