@@ -22,6 +22,11 @@ script:
   - pytest --cov=server --rootdir=. && coverage xml # set rootdir because of relative path for SQLite connections
   - sonar-scanner
 
+branches:
+  only:
+    - master
+    - dev
+
 notifications:
   email: false
 
