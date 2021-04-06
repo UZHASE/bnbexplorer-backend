@@ -2,11 +2,7 @@
 
 from __future__ import absolute_import
 
-from flask import json
-from six import BytesIO
-
-from swagger_server.models.layer import Layer  # noqa: E501
-from swagger_server.test import BaseTestCase
+from test import BaseTestCase
 
 
 class TestLayersController(BaseTestCase):

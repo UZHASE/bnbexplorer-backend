@@ -2,7 +2,7 @@
 
 import connexion
 import os
-from swagger_server import encoder
+from server import encoder
 from flask_cors import CORS
 import sqlite3
 from dotenv import load_dotenv

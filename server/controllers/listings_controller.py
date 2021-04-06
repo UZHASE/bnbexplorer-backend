@@ -2,10 +2,10 @@ import connexion
 import six
 from flask import jsonify
 
-from swagger_server.models.listing import Listing as Listing_Model
-from swagger_server.models.review import Review as Review_Model
-from swagger_server.repositories.listing_repsotory import Listing as Listing_Repository
-from swagger_server import util
+from server.models.listing import Listing as Listing_Model
+from server.models.review import Review as Review_Model
+from server.repositories.listing_repsotory import Listing as Listing_Repository
+from server import util
 
 def find_listing_by_id(listing_id):  # noqa: E501
     """Find Listing by ID
