@@ -1,3 +1,7 @@
+[![Build Status](https://www.travis-ci.com/UZHASE/bnbexplorer-backend.svg?branch=main)](https://www.travis-ci.com/UZHASE/bnbexplorer-backend)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uzhase_bnbexplorer-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=uzhase_bnbexplorer-backend)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=uzhase_bnbexplorer-backend&metric=coverage)](https://sonarcloud.io/dashboard?id=uzhase_bnbexplorer-backend)
+
 # Swagger generated server
 
 ## Overview
