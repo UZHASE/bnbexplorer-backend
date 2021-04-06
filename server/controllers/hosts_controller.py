@@ -4,9 +4,9 @@ import connexion
 import six
 from flask import jsonify
 
-from swagger_server.models.host import Host  # noqa: E501
-from swagger_server import util
-from swagger_server.repositories.host_repository import Host as Host_Repository
+from server.models.host import Host  # noqa: E501
+from server import util
+from server.repositories.host_repository import Host as Host_Repository
 
 
 def find_host_by_id(host_id):  # noqa: E501

@@ -1,8 +1,8 @@
 import connexion
 import six
 
-from swagger_server.models.layer import Layer  # noqa: E501
-from swagger_server import util
+from server.models.layer import Layer  # noqa: E501
+from server import util
 
 
 def find_complaints_layer():  # noqa: E501
