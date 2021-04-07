@@ -1,6 +1,6 @@
-from swagger_server.repositories.base_repository import Repository
-from swagger_server.models.listing import Listing as Listing_Model
-from swagger_server.models.host import Host as Host_Model
+from server.repositories.base_repository import Repository
+from server.models.listing import Listing as Listing_Model
+from server.models.host import Host as Host_Model
 
 
 class Listing(Repository):

@@ -1,13 +1,35 @@
-# ref: https://docs.travis-ci.com/user/languages/python
 language: python
 python:
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  #- "3.5-dev" # 3.5 development branch
-  #- "nightly" # points to the latest development branch e.g. 3.6-dev
-# command to install dependencies
-install: "pip install -r requirements.txt"
-# command to run tests
-script: nosetests
+  - "3.9"
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "AEFpy+HkbWNgyhIz2zI6d7l4a+NoTKUe0hKWZjPOUMyU4gmi++kPFepen47Na8gxVtUp698OvsbW2PlCa+RJvTdY4nP3/A6CIUVBAEN0XRPhJfki4Uxg8qXWm2ugKrKhhIDuY02/UPlTg+bohoudJB4GGRZ3a1EXRXHdmB+O5SH9X9WYQHJXwHczHhNwhIDwaEFBZqv591m5wMsbKE9RbfKLa5t21vPG3nhoznP2IV8a5VtilEKDSA579p4HDnuhqAiX2e2vuvnc3BYFRR6GQz6mvfMYSrDx79Wd+bLaV7/ALuHDtH/gHLzCCEaNeJuxO+GjvD85pwIuyM+PtD3unAGNlvqTCNN4rIg97ay9XF13bjoWICuUSG/Nf/nUiIQmVslAUAmQfegAmLpNrt+hOkXskglg8dPqQCx5WAROCpyM7edzgVN6EwzhbwTAeffOkeUdQAd8rxb0oHyxnIQFeXIiSIHRXZWgqsoJD7y/CkkBfG6ZmmhaDxFjDQK+gRfPGvRvue+YT8Ph8TVNwkqcz68bSDNhUs5YmvWcQrRxzATD1cQPNGgQoe5Akkyx/YCzqr9L58zUPJpwLHXsrlY1IjfeJXyqdOnQ89gIP8vKWJwRwbZ8QpUpGEUFWYgyokvFpwIz20BzQPEUn1mVQzhLVYfGo6IrKNxkAewCiC8zclY="
+  on:
+    branch: main
+
+addons:
+  sonarcloud:
+    organization: "uzhase-fs21"
+    token:
+      secure: cP009y0D/ftpltXV0kL7w2X12YEgQzB9dEU5aoY/QSMRws9vHXXASY1bZ1b0sAE84SZpkUJBymxndCLwdtHPI9BRzOq2QPXlMNnfay3Z9iDyBbFtDQI7dEFi4WhPyjIj+rnj66WFABXNhJeDwkxbzIA/i0qsYzcA4tdbb82d1DaO1+X7QmNL2n5PWh7POnX7s9h3XGLqoeXv0mD59EPL28VIsWWkiN0Hk9LrSJC43ecWqJFwzEDDhLRoS3XzUpW64flUrPPUmn+5EVOCKzzhQoU5cGNsYf+hOjR1g4qyHVz8OTZeeoi1zEqCVDPMsmBey+hX7zsKNp5gHmZaKHD+jQtgkxyNOIG+KG8zFaLL5bTje8TrMfYj7GVc1qQ/6xUPOu53SV6Q93QAHPdKhpyyqL2Z6FMBSnlbbo8WAgAA6gY776loXv7R6HBr21By//wv/ozj4Oqal8GwGV1vM1w7+l1NFrA6hFsu8Z7q4NvJKskfXW0ueggU2OjU3TI0bWJfye7lkh6gZW2Ab2m8TvzKNm9MnzfKf6Req6uMHbC1yyzYd5Sf0fYcCpJQ5TSpXY9ZZhQhNnWh2VTe763bdzWNUjvaG0FGlnEjPiz8QNaqRVvTiUfXVUb6OtiDcWvJaRS7LYtMhO4tyhp7BiRRfuDGbTSK5VYy9eYkW9Ohm/3fg9c=
+install:
+  - pip install -r requirements.txt
+  - pip install -r test-requirements.txt
+script:
+  # other script steps might be done before running the actual analysis
+  - pytest --cov=server --rootdir=. && coverage xml # set rootdir because of relative path for SQLite connections
+  - sonar-scanner
+
+branches:
+  only:
+    - main
+    - dev
+
+notifications:
+  email: false
+
+env:
+  global:
+    - secure: SONAR_TOKEN=cP009y0D/ftpltXV0kL7w2X12YEgQzB9dEU5aoY/QSMRws9vHXXASY1bZ1b0sAE84SZpkUJBymxndCLwdtHPI9BRzOq2QPXlMNnfay3Z9iDyBbFtDQI7dEFi4WhPyjIj+rnj66WFABXNhJeDwkxbzIA/i0qsYzcA4tdbb82d1DaO1+X7QmNL2n5PWh7POnX7s9h3XGLqoeXv0mD59EPL28VIsWWkiN0Hk9LrSJC43ecWqJFwzEDDhLRoS3XzUpW64flUrPPUmn+5EVOCKzzhQoU5cGNsYf+hOjR1g4qyHVz8OTZeeoi1zEqCVDPMsmBey+hX7zsKNp5gHmZaKHD+jQtgkxyNOIG+KG8zFaLL5bTje8TrMfYj7GVc1qQ/6xUPOu53SV6Q93QAHPdKhpyyqL2Z6FMBSnlbbo8WAgAA6gY776loXv7R6HBr21By//wv/ozj4Oqal8GwGV1vM1w7+l1NFrA6hFsu8Z7q4NvJKskfXW0ueggU2OjU3TI0bWJfye7lkh6gZW2Ab2m8TvzKNm9MnzfKf6Req6uMHbC1yyzYd5Sf0fYcCpJQ5TSpXY9ZZhQhNnWh2VTe763bdzWNUjvaG0FGlnEjPiz8QNaqRVvTiUfXVUb6OtiDcWvJaRS7LYtMhO4tyhp7BiRRfuDGbTSK5VYy9eYkW9Ohm/3fg9c=

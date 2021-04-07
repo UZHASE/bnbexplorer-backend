@@ -2,11 +2,7 @@
 
 from __future__ import absolute_import
 
-from flask import json
-from six import BytesIO
-
-from swagger_server.models.host import Host  # noqa: E501
-from swagger_server.test import BaseTestCase
+from test import BaseTestCase
 
 
 class TestHostsController(BaseTestCase):
@@ -18,7 +14,7 @@ class TestHostsController(BaseTestCase):
         Find Hosts by ID
         """
         response = self.client.open(
-            '/api/v1/airbnb-explorer/hosts/{hostId}'.format(hostId=56),
+            '/api/v1/airbnb-explorer/hosts/{hostId}'.format(hostId=2787),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

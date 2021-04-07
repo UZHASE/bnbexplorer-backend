@@ -1,5 +1,5 @@
-from swagger_server.repositories.base_repository import Repository
-from swagger_server.models.host import Host as Host_Model
+from server.repositories.base_repository import Repository
+from server.models.host import Host as Host_Model
 
 
 class Host(Repository):
