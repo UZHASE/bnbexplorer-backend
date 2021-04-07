@@ -56,10 +56,10 @@ class Listing(Repository):
             query = query.where(Lower(hosts.name).like(Lower(filter.host_name + '%')))
         if filter.neighbourhood is not None:
             # TODO: We can accept a list and use SQL's IN function to filter for the given values
-            query = query.where(listings.neighbourhood == filter.neighbourhood)
+            query = query.where(Lower(listings.neighbourhood) == Lower(filter.neighbourhood))
         if filter.area is not None:
             # TODO: We can accept a list and use SQL's IN function to filter for the given values
-            query = query.where(listings.area == filter.area)
+            query = query.where(Lower(listings.area) == Lower(filter.area))
         if filter.price_min is not None:
             query = query.where(listings.price >= filter.price_min)
         if filter.price_max is not None:
@@ -77,6 +77,6 @@ class Listing(Repository):
             query = query.where(Lower(listings.room_type) == Lower(filter.room_type))
         # LIMIT clause
         query = query.limit(self.ROW_LIMIT)
-
+        
         log.debug(query.get_sql())
         return query.get_sql()
