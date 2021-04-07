@@ -8,32 +8,17 @@ from server.models.review import Review as Review_Model
 from server.repositories.listing_repsotory import Listing as Listing_Repository
 from server import util
 
-def find_listing_by_id(listing_id):  # noqa: E501
+def find_listing_by_id(listing_id):
     """Find Listing by ID
 
-    Returns a single Listing matching the given ID # noqa: E501
+    Returns a single Listing matching the given ID
 
     :param listing_id: ID of Listing to return
     :type listing_id: int
 
     :rtype: Listing
     """
-
-    listing = Listing_Model(
-        listing_id,
-        'Listing',
-        'Host',
-        'Brooklyn',
-        'Midtown',
-        47.3769,
-        8.5417,
-        'Single Room',
-        123,
-        1,
-        3333,
-        365
-    )
-    return jsonify(listing)
+    return jsonify(Listing_Repository().get_by_id(listing_id))
 
 
 def find_listings(listing_name=None, host_id=None, host_name=None, location=None, area=None, price_min=None, price_max=None, min_nights=None, availability=None, listings_per_host=None, room_type=None):  # noqa: E501

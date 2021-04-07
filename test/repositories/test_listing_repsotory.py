@@ -7,9 +7,26 @@ from server.repositories.listing_repsotory import Listing
 
 class TestListing(TestCase):
 
-    #####################
-    #   SANITY TESTS    #
-    #####################
+    ########################
+    #   Test: get_by_id    #
+    ########################
+    def test_get_by_id_successful(self):
+        given_id = 2539
+        listings = Listing().get_by_id(given_id)
+        # matches a listing with given ID
+        self.assertEqual(1, len(listings))
+        self.assertEqual(given_id, listings[0].id)
+
+    def test_get_by_id_not_found(self):
+        # expected no result for this ID
+        given_id = 1
+        listings = Listing().get_by_id(given_id)
+        # no match
+        self.assertEqual(0, len(listings))
+
+    ######################
+    #   Test: get_all    #
+    ######################
     def test_get_all_with_empty_filter(self):
         # no filter params = retrieve all Listings
         given_filter = ListingsFilter()
