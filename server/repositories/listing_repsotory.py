@@ -12,24 +12,36 @@ log = logging.getLogger('listing_repo')
 
 class Listing(Repository):
 
+    def get_by_id(self, listing_id):
+        # build query
+        query = self.build_get_by_id_query(listing_id)
+        # execute query
+        return self.execute_select_query(query)
+
     def get_all(self, listings_filter):
-        # build query with provided params
+        # build query
         query = self.build_get_all_query(listings_filter)
         # execute query
-        query_results = self._db.execute(query).fetchall()
-        # object mapping
-        result = []
-        for row in query_results:
-            row = dict(row)
-            listing = Listing_Model.from_dict(row)
-            listing.host = Host_Model(
-                id=row['host_id'],
-                name=row['host_name'],
-                num_of_listings=row['num_of_listings']
-            )
-            result.append(listing)
+        return self.execute_select_query(query)
 
-        return result
+    def build_get_by_id_query(self, listing_id):
+        # tables
+        listings = Table('listings')
+        hosts = Table('hosts')
+        # query building
+        query = Query \
+            .from_(listings) \
+            .join(hosts)\
+            .on(listings.host_id == hosts.id)\
+            .select(
+                listings.id, listings.name, listings.neighbourhood, listings.area, listings.longitude, listings.latitude,
+                listings.room_type.as_('roomType'), listings.price, listings.min_nights.as_('minNights'),
+                listings.num_of_reviews.as_('numOfReviews'), listings.availability, hosts.id.as_('host_id'),
+                hosts.name.as_('host_name'), hosts.num_of_listings)\
+            .where(listings.id == listing_id)
+
+        log.debug(query.get_sql())
+        return query.get_sql()
 
     def build_get_all_query(self, filter):
         # tables
@@ -80,3 +92,17 @@ class Listing(Repository):
         
         log.debug(query.get_sql())
         return query.get_sql()
+
+    def map_result(self, query_results):
+        # object mapping
+        result = []
+        for row in query_results:
+            row = dict(row)
+            listing = Listing_Model.from_dict(row)
+            listing.host = Host_Model(
+                id=row['host_id'],
+                name=row['host_name'],
+                num_of_listings=row['num_of_listings']
+            )
+            result.append(listing)
+        return result
