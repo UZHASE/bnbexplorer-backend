@@ -3,6 +3,7 @@ import six
 from flask import jsonify
 
 from server.models.listing import Listing as Listing_Model
+from server.models.listings_filter import ListingsFilter
 from server.models.review import Review as Review_Model
 from server.repositories.listing_repsotory import Listing as Listing_Repository
 from server import util
@@ -41,7 +42,7 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
     Returns a list of AirBnB Listings based on the provided filter criteria # noqa: E501
 
     :param listing_name: Name to match Listings (can bei either exact match or not)
-    :type listing_name: int
+    :type listing_name: str
     :param host_id: Filter Listings based on hostId
     :type host_id: int
     :param host_name: Name to match Hosts of Listings (can bei either exact match or not)
@@ -65,8 +66,21 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
 
     :rtype: List[Listing]
     """
-
-    return jsonify(Listing_Repository().get_all())
+    # provided filter options
+    request_filter = ListingsFilter(
+        listing_name,
+        host_id,
+        host_name,
+        location,
+        area,
+        price_min,
+        price_max,
+        min_nights,
+        availability,
+        listings_per_host,
+        room_type
+    )
+    return jsonify(Listing_Repository().get_all(request_filter))
 
 
 def find_reviews_for_listing(listing_id):  # noqa: E501

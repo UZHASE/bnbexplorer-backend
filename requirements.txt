@@ -7,3 +7,4 @@ setuptools >= 21.0.0
 Flask-Cors==3.0.10
 python-dotenv==0.16.0
 swagger-ui-bundle==0.0.8
+pypika>=0.48.0
