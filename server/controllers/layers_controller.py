@@ -5,7 +5,7 @@ from flask import jsonify
 from server.models.layer import Layer
 from server.repositories.layer_repository import Layer as Layer_Repository
 from server import util
-from server.repositories.layer_strategy import CrimeLayerStrategy, HealthLayerStrategy
+from server.repositories.layer_strategy import CrimeLayerStrategy, HealthLayerStrategy, ComplaintLayerStrategy
 
 
 def find_complaints_layer():
@@ -16,7 +16,7 @@ def find_complaints_layer():
 
     :rtype: Layer
     """
-    return 'do some magic!'
+    return jsonify(Layer_Repository(ComplaintLayerStrategy()).get_all())
 
 
 def find_crime_layer():
