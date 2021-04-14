@@ -43,8 +43,8 @@ class HealthLayerStrategy(LayerStrategy):
         result = []
         for row in query_results:
             row = dict(row)
-            listing = LayerEntry_Model.from_dict(row)
-            result.append(listing)
+            entry = LayerEntry_Model.from_dict(row)
+            result.append(entry)
         layer.entries = result
         return layer
 
@@ -70,7 +70,34 @@ class CrimeLayerStrategy(LayerStrategy):
         result = []
         for row in query_results:
             row = dict(row)
-            listing = LayerEntry_Model.from_dict(row)
-            result.append(listing)
+            entry = LayerEntry_Model.from_dict(row)
+            result.append(entry)
+        layer.entries = result
+        return layer
+
+
+class ComplaintLayerStrategy(LayerStrategy):
+    """
+    Implement the complaint layer using the Strategy interface.
+    """
+
+    def build_get_all_query(self):
+        # table
+        nypd_incidents = Table('nypd_incidents')
+        # query building
+        return Query \
+            .from_(nypd_incidents) \
+            .select(nypd_incidents.latitude, nypd_incidents.longitude)\
+            .where(nypd_incidents.crime_type == 'OFF. AGNST PUB ORD SENSBLTY &')\
+            .get_sql()
+
+    def map_result(self, query_results):
+        # object mapping
+        layer = Layer_Model(type=LayerType.COMPLAINT.value)
+        result = []
+        for row in query_results:
+            row = dict(row)
+            entry = LayerEntry_Model.from_dict(row)
+            result.append(entry)
         layer.entries = result
         return layer
