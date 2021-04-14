@@ -14,7 +14,7 @@ class TestListingsController(BaseTestCase):
         Find Listing by ID
         """
         response = self.client.open(
-            '/api/v1/airbnb-explorer/listings/{listingId}'.format(listingId=56),
+            '/api/v1/airbnb-explorer/listings/{listingId}'.format(listingId=2539),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

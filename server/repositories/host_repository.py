@@ -12,3 +12,7 @@ class Host(Repository):
         ''', (host_id,)).fetchone()
 
         return Host_Model.from_dict(dict(query_result))
+
+    def map_result(self, query_results):
+        #TODO: Mapping
+        pass
