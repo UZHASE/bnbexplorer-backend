@@ -60,7 +60,8 @@ class CrimeLayerStrategy(LayerStrategy):
         # query building
         query = Query \
             .from_(nypd_incidents) \
-            .select(nypd_incidents.latitude, nypd_incidents.longitude)
+            .select(nypd_incidents.latitude, nypd_incidents.longitude) \
+            .where(nypd_incidents.crime_type != 'OFF. AGNST PUB ORD SENSBLTY &')
 
         return query.get_sql()
 
