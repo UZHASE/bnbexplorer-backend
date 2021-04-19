@@ -60,7 +60,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       - name: hostId
         in: query
         description: Filter Listings based on hostId

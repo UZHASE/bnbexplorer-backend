@@ -15,8 +15,13 @@ class Listing(Repository):
     def get_by_id(self, listing_id):
         # build query
         query = self.build_get_by_id_query(listing_id)
-        # execute query
-        return self.execute_select_query(query)
+        # execute query always returns a (singleton ot empty) list, but we need the Listing object
+        listing = self.execute_select_query(query)
+        if listing:
+            # we have a match, unpack the Listing
+            listing = listing[0]
+        return listing
+
 
     def get_all(self, listings_filter):
         # build query
