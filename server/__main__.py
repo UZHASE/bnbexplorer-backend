@@ -16,7 +16,7 @@ def main():
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'NYC AirBnB Explorer'}, pythonic_params=True)
-    CORS(app.app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}})
+    CORS(app.app)
     app.run(port=int(env.get('PORT', 8080)), debug=bool(util.strtobool(env.get('DEBUG', 'False'))))
 
 
