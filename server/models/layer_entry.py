@@ -14,28 +14,23 @@ class LayerEntry(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, latitude: float=None, longitude: float=None):  # noqa: E501
+    def __init__(self, latitude: float=None, longitude: float=None):
         """LayerEntry - a model defined in Swagger
 
-        :param id: The id of this LayerEntry.  # noqa: E501
-        :type id: int
-        :param latitude: The latitude of this LayerEntry.  # noqa: E501
+        :param latitude: The latitude of this LayerEntry.
         :type latitude: float
-        :param longitude: The longitude of this LayerEntry.  # noqa: E501
+        :param longitude: The longitude of this LayerEntry.
         :type longitude: float
         """
         self.swagger_types = {
-            'id': int,
             'latitude': float,
             'longitude': float
         }
 
         self.attribute_map = {
-            'id': 'id',
             'latitude': 'latitude',
             'longitude': 'longitude'
         }
-        self._id = id
         self._latitude = latitude
         self._longitude = longitude
 
@@ -45,31 +40,10 @@ class LayerEntry(Model):
 
         :param dikt: A dict.
         :type: dict
-        :return: The LayerEntry of this LayerEntry.  # noqa: E501
+        :return: The LayerEntry of this LayerEntry.
         :rtype: LayerEntry
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def id(self) -> int:
-        """Gets the id of this LayerEntry.
-
-
-        :return: The id of this LayerEntry.
-        :rtype: int
-        """
-        return self._id
-
-    @id.setter
-    def id(self, id: int):
-        """Sets the id of this LayerEntry.
-
-
-        :param id: The id of this LayerEntry.
-        :type id: int
-        """
-
-        self._id = id
 
     @property
     def latitude(self) -> float:
