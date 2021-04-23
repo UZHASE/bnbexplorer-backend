@@ -48,7 +48,7 @@ class TestListingsController(BaseTestCase):
         Find Reviews for a given Listing
         """
         response = self.client.open(
-            '/api/v1/airbnb-explorer/listings/{listingId}/reviews'.format(listingId=56),
+            '/api/v1/airbnb-explorer/listings/{listingId}/reviews'.format(listingId=5121),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
