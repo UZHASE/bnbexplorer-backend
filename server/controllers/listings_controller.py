@@ -1,12 +1,9 @@
-import connexion
-import six
 from flask import jsonify
 
-from server.models.listing import Listing as Listing_Model
 from server.models.listings_filter import ListingsFilter
-from server.models.review import Review as Review_Model
 from server.repositories.listing_repsotory import Listing as Listing_Repository
-from server import util
+from server.repositories.review_repsotory import Review as Review_Repository
+
 
 def find_listing_by_id(listing_id):
     """Find Listing by ID
@@ -21,7 +18,9 @@ def find_listing_by_id(listing_id):
     return jsonify(Listing_Repository().get_by_id(listing_id))
 
 
-def find_listings(listing_name=None, host_id=None, host_name=None, location=None, area=None, price_min=None, price_max=None, min_nights=None, availability=None, listings_per_host=None, room_type=None):  # noqa: E501
+def find_listings(listing_name=None, host_id=None, host_name=None, location=None, area=None, price_min=None,
+                  price_max=None, min_nights=None, availability=None, listings_per_host=None,
+                  room_type=None):  # noqa: E501
     """Retrieve NYC AirBnB listings
 
     Returns a list of AirBnB Listings based on the provided filter criteria # noqa: E501
@@ -68,7 +67,7 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
     return jsonify(Listing_Repository().get_all(request_filter))
 
 
-def find_reviews_for_listing(listing_id):  # noqa: E501
+def find_reviews_for_listing(listing_id):
     """Find Reviews for a given Listing
 
     Returns all Reviews for a single Listing matching the given ID # noqa: E501
@@ -78,22 +77,5 @@ def find_reviews_for_listing(listing_id):  # noqa: E501
 
     :rtype: List[Review]
     """
-    review1 = Review_Model(
-        1,
-        listing_id,
-        'Very nice!'
-    )
 
-    review2 = Review_Model(
-        2,
-        listing_id,
-        'Good!'
-    )
-
-    review3 = Review_Model(
-        3,
-        listing_id,
-        'Worst AirBnB ever!'
-    )
-
-    return jsonify(review1, review2, review3)
+    return jsonify(Review_Repository().get_all_by_listing_id(listing_id))
