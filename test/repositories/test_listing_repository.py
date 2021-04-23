@@ -12,17 +12,17 @@ class TestListing(TestCase):
     ########################
     def test_get_by_id_successful(self):
         given_id = 2539
-        listings = Listing().get_by_id(given_id)
+        listing = Listing().get_by_id(given_id)
         # matches a listing with given ID
-        self.assertEqual(1, len(listings))
-        self.assertEqual(given_id, listings[0].id)
+        self.assertTrue(listing)
+        self.assertEqual(given_id, listing.id)
 
     def test_get_by_id_not_found(self):
         # expected no result for this ID
         given_id = 1
-        listings = Listing().get_by_id(given_id)
-        # no match
-        self.assertEqual(0, len(listings))
+        listing = Listing().get_by_id(given_id)
+        # no match: Listing is not present
+        self.assertFalse(listing)
 
     ######################
     #   Test: get_all    #

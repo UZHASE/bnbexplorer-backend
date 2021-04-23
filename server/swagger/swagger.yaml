@@ -31,6 +31,7 @@ paths:
         explode: false
         schema:
           type: integer
+          example: 2539
       responses:
         "200":
           description: Successful operation
@@ -59,7 +60,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       - name: hostId
         in: query
         description: Filter Listings based on hostId
@@ -232,6 +233,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Layer'
+              example:
+                entries:
+                  - latitude: 6.02745618307040320615897144307382404804229736328125
+                    longitude: 1.46581298050294517310021547018550336360931396484375
+                  - latitude: 6.02745618307040320615897144307382404804229736328125
+                    longitude: 1.46581298050294517310021547018550336360931396484375
+                type: CRIME_LAYER
         "400":
           description: Invalid ID supplied
         "500":
@@ -251,6 +259,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Layer'
+              example:
+                entries:
+                  - latitude: 6.02745618307040320615897144307382404804229736328125
+                    longitude: 1.46581298050294517310021547018550336360931396484375
+                  - latitude: 6.02745618307040320615897144307382404804229736328125
+                    longitude: 1.46581298050294517310021547018550336360931396484375
+                type: COMPLAINT_LAYER
         "500":
           description: Internal Server Error
       x-openapi-router-controller: server.controllers.layers_controller
@@ -268,6 +283,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Layer'
+              example:
+                entries:
+                  - latitude: 6.02745618307040320615897144307382404804229736328125
+                    longitude: 1.46581298050294517310021547018550336360931396484375
+                  - latitude: 6.02745618307040320615897144307382404804229736328125
+                    longitude: 1.46581298050294517310021547018550336360931396484375
+                type: HEALTH_LAYER
         "500":
           description: Internal Server Error
       x-openapi-router-controller: server.controllers.layers_controller
@@ -470,9 +492,9 @@ components:
         type:
           type: string
           enum:
-          - crime
-          - complaints
-          - health
+          - CRIME_LAYER
+          - COMPLAINT_LAYER
+          - HEALTH_LAYER
         entries:
           type: array
           items:
@@ -480,23 +502,17 @@ components:
       example:
         entries:
         - latitude: 6.02745618307040320615897144307382404804229736328125
-          id: 0
           longitude: 1.46581298050294517310021547018550336360931396484375
         - latitude: 6.02745618307040320615897144307382404804229736328125
-          id: 0
           longitude: 1.46581298050294517310021547018550336360931396484375
-        type: crime
+        type: CRIME_LAYER
     LayerEntry:
       type: object
       properties:
-        id:
-          type: integer
         latitude:
           type: number
         longitude:
           type: number
       example:
         latitude: 6.02745618307040320615897144307382404804229736328125
-        id: 0
         longitude: 1.46581298050294517310021547018550336360931396484375
-
