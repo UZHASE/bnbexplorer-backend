@@ -7,8 +7,6 @@ from server.repositories.base_repository import Repository
 from server.models.listing import Listing as Listing_Model
 from server.models.host import Host as Host_Model
 
-log = logging.getLogger('listing_repo')
-
 
 class Listing(Repository):
 
@@ -16,18 +14,23 @@ class Listing(Repository):
         # build query
         query = self.build_get_by_id_query(listing_id)
         # execute query always returns a (singleton ot empty) list, but we need the Listing object
-        listing = self.execute_select_query(query)
+        listing = self.execute_select_query(query.get_sql())
         if listing:
             # we have a match, unpack the Listing
             listing = listing[0]
         return listing
 
+    def get_all_by_id(self, id_list):
+        # build query
+        query = self.build_get_all_by_id_query(id_list)
+        # execute query
+        return self.execute_select_query(query.get_sql())
 
     def get_all(self, listings_filter):
         # build query
         query = self.build_get_all_query(listings_filter)
         # execute query
-        return self.execute_select_query(query)
+        return self.execute_select_query(query.get_sql())
 
     def build_get_by_id_query(self, listing_id):
         # tables
@@ -36,17 +39,33 @@ class Listing(Repository):
         # query building
         query = Query \
             .from_(listings) \
-            .join(hosts)\
-            .on(listings.host_id == hosts.id)\
+            .join(hosts) \
+            .on(listings.host_id == hosts.id) \
             .select(
                 listings.id, listings.name, listings.neighbourhood, listings.area, listings.longitude, listings.latitude,
                 listings.room_type.as_('roomType'), listings.price, listings.min_nights.as_('minNights'),
                 listings.num_of_reviews.as_('numOfReviews'), listings.availability, hosts.id.as_('host_id'),
-                hosts.name.as_('host_name'), hosts.num_of_listings)\
+                hosts.name.as_('host_name'), hosts.num_of_listings) \
             .where(listings.id == listing_id)
+        return query
 
-        log.debug(query.get_sql())
-        return query.get_sql()
+    def build_get_all_by_id_query(self, id_list):
+        # TODO: Testing!
+        # tables
+        listings = Table('listings')
+        hosts = Table('hosts')
+        # query building
+        query = Query \
+            .from_(listings) \
+            .join(hosts) \
+            .on(listings.host_id == hosts.id) \
+            .select(
+                listings.id, listings.name, listings.neighbourhood, listings.area, listings.longitude, listings.latitude,
+                listings.room_type.as_('roomType'), listings.price, listings.min_nights.as_('minNights'),
+                listings.num_of_reviews.as_('numOfReviews'), listings.availability, hosts.id.as_('host_id'),
+                hosts.name.as_('host_name'), hosts.num_of_listings) \
+            .where(listings.id.isin(id_list))
+        return query
 
     def build_get_all_query(self, filter):
         # tables
@@ -55,8 +74,8 @@ class Listing(Repository):
         # query building
         query = Query \
             .from_(listings) \
-            .join(hosts)\
-            .on(listings.host_id == hosts.id)\
+            .join(hosts) \
+            .on(listings.host_id == hosts.id) \
             .select(
                 listings.id, listings.name, listings.neighbourhood, listings.area, listings.longitude, listings.latitude,
                 listings.room_type.as_('roomType'), listings.price, listings.min_nights.as_('minNights'),
@@ -64,12 +83,10 @@ class Listing(Repository):
                 hosts.name.as_('host_name'), hosts.num_of_listings)
         # WHERE clauses
         if filter.listing_name is not None:
-            # TODO: Does not need to be exact match, we could SQL's LIKE function for partial matching
             query = query.where(Lower(listings.name).like(Lower(filter.listing_name + '%')))
         if filter.host_id is not None:
             query = query.where(hosts.id == filter.host_id)
         if filter.host_name is not None:
-            # TODO: Does not need to be exact match, we could SQL's LIKE function for partial matching
             query = query.where(Lower(hosts.name).like(Lower(filter.host_name + '%')))
         if filter.neighbourhood is not None:
             # TODO: We can accept a list and use SQL's IN function to filter for the given values
@@ -94,9 +111,7 @@ class Listing(Repository):
             query = query.where(Lower(listings.room_type) == Lower(filter.room_type))
         # LIMIT clause
         query = query.limit(self.ROW_LIMIT)
-        
-        log.debug(query.get_sql())
-        return query.get_sql()
+        return query
 
     def map_result(self, query_results):
         # object mapping
