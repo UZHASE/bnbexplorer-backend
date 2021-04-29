@@ -53,6 +53,15 @@ class TestListingsController(BaseTestCase):
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
 
+    def test_get_metadata(self):
+        """Test case for listings metadata
+        """
+        response = self.client.open(
+            '/api/v1/airbnb-explorer/listings/metadata',
+            method='GET')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
 
 if __name__ == '__main__':
     import unittest
