@@ -98,6 +98,38 @@ class Listing(Repository):
         log.debug(query.get_sql())
         return query.get_sql()
 
+    def get_metadata(self):
+        min_max_listings = self._db.execute('''
+        SELECT 
+            MIN(price) minPrice, 
+            MAX(price) maxPrice, 
+            COUNT(*) numOfListings 
+        FROM listings
+        ''').fetchone()
+
+        min_max_hosts = self._db.execute('''
+        SELECT 
+            MIN(num_of_listings) minListingsPerHost, 
+            MAX(num_of_listings) maxListingsPerHost 
+        FROM hosts
+        ''').fetchone()
+
+        areas = self._db.execute('SELECT DISTINCT(area) areas FROM listings').fetchall()
+        neighbourhoods = self._db.execute('SELECT DISTINCT(neighbourhood) neighbourhoods FROM listings').fetchall()
+        room_types = self._db.execute('SELECT DISTINCT(room_type) roomTypes FROM listings').fetchall()
+
+        return {
+            'minPrice': min_max_listings['minPrice'],
+            'maxPrice': min_max_listings['maxPrice'],
+            'numOfListings': min_max_listings['numOfListings'],
+            'areas': [area[0] for area in areas],
+            'neighbourhoods': [neighbourhood[0] for neighbourhood in neighbourhoods],
+            'roomTypes': [room_type[0] for room_type in room_types],
+            'minListingsPerHost': min_max_hosts['minListingsPerHost'],
+            'maxListingsPerHost': min_max_hosts['maxListingsPerHost']
+        }
+
+
     def map_result(self, query_results):
         # object mapping
         result = []
