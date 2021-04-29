@@ -634,3 +634,10 @@ class TestListing(TestCase):
         actual_query = Listing().build_get_all_query(given_filter)
         # expected query matches actual query
         self.assertEqual(expected_query, actual_query)
+
+    ########################
+    #   Test: get_metadata    #
+    ########################
+    def test_get_metadata(self):
+        metadata = Listing().get_metadata()
+        self.assertTrue(metadata)

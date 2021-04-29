@@ -15,6 +15,23 @@ tags:
 - name: Recommendations
   description: Endpoints for AirBnB Listing Recommendations
 paths:
+  /listings/metadata:
+    get:
+      tags:
+        - Listings
+      summary: Get metadata about listings
+      description: Returns statistics about all listings
+      operationId: get_metadata
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingsMetadata'
+        "500":
+          description: Internal Server Error
+      x-openapi-router-controller: server.controllers.listings_controller
   /listings/{listingId}:
     get:
       tags:
@@ -516,3 +533,37 @@ components:
       example:
         latitude: 6.02745618307040320615897144307382404804229736328125
         longitude: 1.46581298050294517310021547018550336360931396484375
+    ListingsMetadata:
+      type: object
+      properties:
+        minPrice:
+          type: integer
+        maxPrice:
+          type: integer
+        numOfListings:
+          type: integer
+        areas:
+          type: array
+          items:
+            type: string
+        neighbourhoods:
+          type: array
+          items:
+            type: string
+        roomTypes:
+          type: array
+          items:
+            type: string
+        minListingsPerHost:
+          type: integer
+        maxListingsPerHost:
+          type: integer
+      example:
+        minPrice: 20
+        maxPrice: 1800
+        numOfListings: 10000
+        areas: ['West Village', 'Kensington']
+        neighbourhoods: ['Brooklyn', 'Queens']
+        roomTypes: ['Entire home/apt', 'Private Room']
+        minListingsPerHost: 1
+        maxListingsPerHost: 10
