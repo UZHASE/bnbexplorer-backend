@@ -79,3 +79,7 @@ def find_reviews_for_listing(listing_id):
     """
 
     return jsonify(Review_Repository().get_all_by_listing_id(listing_id))
+
+def metadata():
+
+    return 'Return some metadata'
