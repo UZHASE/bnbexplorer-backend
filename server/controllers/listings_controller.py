@@ -80,7 +80,7 @@ def find_reviews_for_listing(listing_id):
 
     return jsonify(Review_Repository().get_all_by_listing_id(listing_id))
 
-def metadata():
+def get_metadata():
     """Get metadata about all listings
 
     Returns basic statistics over all listings like min, max prices etc.

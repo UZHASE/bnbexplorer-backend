@@ -21,7 +21,7 @@ paths:
         - Listings
       summary: Get metadata about listings
       description: Returns statistics about all listings
-      operationId: metadata
+      operationId: get_metadata
       responses:
         "200":
           description: Successful operation
