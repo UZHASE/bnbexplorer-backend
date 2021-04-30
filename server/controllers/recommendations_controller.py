@@ -1,8 +1,3 @@
-import connexion
-import six
-
-from server.models.listing import Listing  # noqa: E501
-from server import util
 from server.models.listings_filter import ListingsFilter
 from server.repositories.recommendations_repository import RecommendationsRepository as Recommendations_Repository
 
@@ -55,10 +50,10 @@ def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_na
     return Recommendations_Repository().recommend_listing(listing_id, request_filter)
 
 
-def recommend_listings_for_attractions():  # noqa: E501
+def recommend_listings_for_attractions():
     """Recommend closest AirBnBs based on a list of Attractions
 
-    Returns a list of recommended Listings # noqa: E501
+    Returns a list of recommended Listings
 
 
     :rtype: List[Listing]

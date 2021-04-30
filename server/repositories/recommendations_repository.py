@@ -1,81 +1,68 @@
+import math
 import random
+from pypika import Table, Query
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.neighbors import NearestNeighbors
 
-from pypika import Table, Query, Order
-from heapq import nsmallest
-from pypika.functions import Sqrt
-from pypika.terms import Pow
-
-from server.dbutils.max import Max
-from server.dbutils.min import Min
-from server.dbutils.normalize import Normalize
-from server.models.room_type_mapper import RoomType
+from server.dbutils.map_rt import MapRT
 from server.repositories.base_repository import Repository
-from server.models.listing_distance import ListingDistance as Distance_Model
 from server.repositories.listing_repsotory import Listing as Listing_Repository
 
 
 class RecommendationsRepository(Repository):
+    # tables
+    listings = Table('listings')
+    hosts = Table('hosts')
 
     def recommend_listing(self, listing_id, request_filter):
         # TODO: Testing!
-        # tables
-        listings = Table('listings')
-        # query building (similar to listing repo: get_all query)
-        subquery_rt = Listing_Repository().build_get_all_query(request_filter)\
-                .select(RoomType(listings.room_type).as_('room_type') # with the addition of room_type mapping
-            ).as_('rt')
-
-        subquery = Query\
-            .from_(subquery_rt)\
+        # query building
+        listing_query = Query \
+            .from_(self.listings) \
             .select(
-                subquery_rt.id,
-                # normalize values between [0,1]
-                Normalize(subquery_rt.longitude, Min(subquery_rt.longitude), Max(subquery_rt.longitude)).as_('long_norm'),
-                Normalize(subquery_rt.latitude, Min(subquery_rt.latitude), Max(subquery_rt.latitude)).as_('lat_norm'),
-                Normalize(subquery_rt.room_type, Min(subquery_rt.room_type),Max(subquery_rt.room_type)).as_('rt_norm'),
-                Normalize(subquery_rt.price, Min(subquery_rt.price), Max(subquery_rt.price)).as_('price_norm'),
-                Normalize(subquery_rt.minNights, Min(subquery_rt.minNights), Max(subquery_rt.minNights)).as_('mn_norm'),
-                Normalize(subquery_rt.numOfReviews, Min(subquery_rt.numOfReviews), Max(subquery_rt.numOfReviews)).as_('nor_norm'),
-                Normalize(subquery_rt.availability, Min(subquery_rt.availability), Max(subquery_rt.availability)).as_('ava_norm')
-            ).as_('sq')
-
-        query = Query \
-            .from_(subquery) \
-            .select(
-                subquery.id,
-                (Sqrt(
-                    Pow(subquery.long_norm, 2) + Pow(subquery.lat_norm, 2) + Pow(subquery.rt_norm, 2) +
-                    Pow(subquery.price_norm, 2) + Pow(subquery.mn_norm, 2) + Pow(subquery.nor_norm, 2)
-                    + Pow(subquery.ava_norm, 2)
-                )).as_('euclidean')
-            ).orderby(2, order=Order.desc)
-        # TODO: Error handling!
-        listing_dists = self.execute_select_query(query.get_sql())
-        target_listing = [x for x in listing_dists if x.id == listing_id]
-        # correction for missing values
-        for listing in listing_dists:
-            if listing.euclidean is None:
-                # could not be mapped
-                listing.euclidean = -1
-
-        recommendations = []
-        if listing_dists:
-            # shuffle list because in case of equal distances, position matters
-            random.shuffle(listing_dists)
-            # get the 6 most similar listings to the target (we ignore the first result because it is the target itself)
-            recommendations = nsmallest(6, listing_dists, key=lambda x: abs(x.euclidean - target_listing[0].euclidean))[1:]
-        # gather ids of recommendations
-        id_list = []
-        for listing in recommendations:
-            id_list.append(listing.id)
+                self.listings.id, self.listings.longitude, self.listings.latitude,
+                MapRT(self.listings.room_type).as_('room_type'), self.listings.price,
+                self.listings.min_nights, self.listings.num_of_reviews, self.listings.availability
+            )
+        # add filter criteria
+        listing_query = Listing_Repository().add_where_clauses(listing_query, request_filter)
+        # execute query
+        listings_dict = self.execute_select_query(listing_query.get_sql())
+        # keep track of ids which we need to retrieve recommendations
+        id_list = list(listings_dict.keys())
+        rec_ids = []
+        if listings_dict:
+            target_idx = id_list.index(listing_id)
+            # scale rows between [0,1]
+            scaled_rows = MinMaxScaler().fit_transform(list(listings_dict.values()))
+            # compute euclidean distance compared to target
+            [self.euclidean_distance(row, scaled_rows[target_idx]) for row in scaled_rows]
+            target_score = scaled_rows[target_idx]
+            # compute recommendations: select 20 closest listings and randomly sample 5
+            # (first element is target itself!)
+            nbrs = NearestNeighbors(n_neighbors=6, algorithm='ball_tree').fit(scaled_rows)
+            rec_idx = nbrs.kneighbors([target_score], 21, return_distance=False)
+            # gather index of recommendations
+            for rec in rec_idx[0]:
+                rec_ids.append(id_list[rec])
+            # randomly sample 5 (excluding the target itself)
+            rec_ids = random.sample(rec_ids[1:], 5)
         # fetch listings
-        return Listing_Repository().get_all_by_id(id_list)
+        return Listing_Repository().get_all_by_id(rec_ids)
 
     def map_result(self, query_result):
         # object mapping
-        result = []
+        ids = []
+        rows = []
         for row in query_result:
-            row = dict(row)
-            listing_distance = Distance_Model.from_dict(row)
-            result.append(listing_distance)
-        return result
+            ids.append((row[0]))
+            rows.append(list(row[1:]))
+        return dict(zip(ids, rows))
+
+    def euclidean_distance(self, target, row):
+        score = 0
+        index = 0
+        for val in row:
+            score += (val - target[index]) ** 2
+            index += 1
+        return math.sqrt(score)
