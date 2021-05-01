@@ -47,7 +47,7 @@ def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_na
         listings_per_host,
         room_type
     )
-    return Recommendations_Repository().recommend_listing(listing_id, request_filter)
+    return Recommendations_Repository().recommend_n_listings(listing_id, request_filter)
 
 
 def recommend_listings_for_attractions():

@@ -324,7 +324,7 @@ paths:
       - name: listingId
         in: query
         description: ID of target Listing to compute similarity
-        required: false
+        required: true
         style: form
         explode: true
         schema:
@@ -339,8 +339,7 @@ paths:
           type: string
       - name: hostName
         in: query
-        description: Name to match Hosts of Listings (can bei either exact match or
-          not)
+        description: Name to match Hosts of Listings (can bei either exact match or not)
         required: false
         style: form
         explode: true

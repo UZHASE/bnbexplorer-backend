@@ -7,9 +7,6 @@ from server.models.host import Host as Host_Model
 
 
 class Listing(Repository):
-    # tables
-    listings = Table('listings')
-    hosts = Table('hosts')
 
     def get_by_id(self, listing_id):
         # build query
@@ -34,38 +31,33 @@ class Listing(Repository):
         return self.execute_select_query(query.get_sql())
 
     def build_get_by_id_query(self, listing_id):
-        # tables
-        listings = Table('listings')
-        hosts = Table('hosts')
         # query building
         query = Query \
-            .from_(listings) \
-            .join(hosts) \
-            .on(listings.host_id == hosts.id) \
+            .from_(self.listings) \
+            .join(self.hosts) \
+            .on(self.listings.host_id == self.hosts.id) \
             .select(
-                listings.id, listings.name, listings.neighbourhood, listings.area, listings.longitude, listings.latitude,
-                listings.room_type.as_('roomType'), listings.price, listings.min_nights.as_('minNights'),
-                listings.num_of_reviews.as_('numOfReviews'), listings.availability, hosts.id.as_('host_id'),
-                hosts.name.as_('host_name'), hosts.num_of_listings) \
-            .where(listings.id == listing_id)
+                self.listings.id, self.listings.name, self.listings.neighbourhood, self.listings.area,
+                self.listings.longitude, self.listings.latitude, self.listings.room_type.as_('roomType'),
+                self.listings.price, self.listings.min_nights.as_('minNights'),
+                self.listings.num_of_reviews.as_('numOfReviews'), self.listings.availability,
+                self.hosts.id.as_('host_id'), self.hosts.name.as_('host_name'), self.hosts.num_of_listings) \
+            .where(self.listings.id == listing_id)
         return query
 
     def build_get_all_by_id_query(self, id_list):
-        # TODO: Testing!
-        # tables
-        listings = Table('listings')
-        hosts = Table('hosts')
         # query building
         query = Query \
-            .from_(listings) \
-            .join(hosts) \
-            .on(listings.host_id == hosts.id) \
+            .from_(self.listings) \
+            .join(self.hosts) \
+            .on(self.listings.host_id == self.hosts.id) \
             .select(
-                listings.id, listings.name, listings.neighbourhood, listings.area, listings.longitude, listings.latitude,
-                listings.room_type.as_('roomType'), listings.price, listings.min_nights.as_('minNights'),
-                listings.num_of_reviews.as_('numOfReviews'), listings.availability, hosts.id.as_('host_id'),
-                hosts.name.as_('host_name'), hosts.num_of_listings) \
-            .where(listings.id.isin(id_list))
+                self.listings.id, self.listings.name, self.listings.neighbourhood, self.listings.area,
+                self.listings.longitude, self.listings.latitude, self.listings.room_type.as_('roomType'),
+                self.listings.price, self.listings.min_nights.as_('minNights'),
+                self.listings.num_of_reviews.as_('numOfReviews'), self.listings.availability,
+                self.hosts.id.as_('host_id'), self.hosts.name.as_('host_name'), self.hosts.num_of_listings) \
+            .where(self.listings.id.isin(id_list))
         return query
 
     def build_get_all_query(self, filter):
