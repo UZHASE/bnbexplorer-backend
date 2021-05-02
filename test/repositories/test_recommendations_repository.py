@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from server.repositories.recommendations_repository import RecommendationsRepository
 from server.models.listings_filter import ListingsFilter
+from server.models.listing import Listing
 
 
 class TestRecommendations(TestCase):
@@ -54,11 +55,10 @@ class TestRecommendations(TestCase):
     #   Test: compute_n_recommendations    #
     ########################################
     def test_compute_n_recommendations_successful(self):
-        target_id = 2539
+        target = Listing(2539, "listing", None, None, None, -73.97237, 40.64749, 'Single Room', 149, 1, 9, 365)
         num_of_recs = 1
         # dict size exceeds sampling size
         listing_dict = {
-            target_id: [-73.97237, 40.64749, 1, 149, 1, 9, 365],
             1: [-73.97237, 40.04749, 1, 100, 5, 12, 365],
             2: [-80.97237, 50.04749, 2, 1, 55, 999, 1],
             3: [-90.97237, 60.04749, 2, 100, 55, 12, 1],
@@ -66,61 +66,60 @@ class TestRecommendations(TestCase):
             5: [-90.97237, 80.04749, 3, 100, 55, 12, 1],
             6: [-80.97237, 90.04749, 3, 100, 55, 12, 1],
         }
-        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target_id, n=num_of_recs)
+        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
         # matches a listing with given ID
         self.assertTrue(recommendations)
         self.assertEqual(num_of_recs, len(recommendations))
-        self.assertEqual(1, len(recommendations))
+
+    def test_compute_n_recommendations_successful_target_contained_in_dict(self):
+        target = Listing(1, "listing", None, None, None, -73.97237, 40.64749, 'Single Room', 149, 1, 9, 365)
+        num_of_recs = 1
+        # dict size exceeds sampling size
+        listing_dict = {
+            1: [-73.97237, 40.04749, 1, 100, 5, 12, 365],
+            2: [-80.97237, 50.04749, 2, 1, 55, 999, 1],
+            3: [-90.97237, 60.04749, 2, 100, 55, 12, 1],
+            4: [-100.97237, 70.04749, 3, 100, 55, 12, 1],
+            5: [-90.97237, 80.04749, 3, 100, 55, 12, 1],
+            6: [-80.97237, 90.04749, 3, 100, 55, 12, 1],
+        }
+        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(num_of_recs, len(recommendations))
 
     def test_compute_n_recommendations_sample_size_smaller_than_n(self):
-        target_id = 2539
+        target = Listing(2539, "listing", None, None, None, -73.97237, 40.64749, 'Single Room', 149, 1, 9, 365)
         num_of_recs = 1
         # dict size is less than sampling size
         listing_dict = {
-            target_id: [-73.97237, 40.64749, 1, 149, 1, 9, 365],
+            target.id: [-73.97237, 40.64749, 1, 149, 1, 9, 365],
             1: [-70.97237, 40.04749, 1, 100, 5, 12, 365],
             2: [-80.97237, 50.04749, 2, 100, 55, 12, 1]
         }
-        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target_id, n=num_of_recs)
+        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
         # matches a listing with given ID
         self.assertTrue(recommendations)
         self.assertEqual(num_of_recs, len(recommendations))
-        self.assertEqual(1, len(recommendations))
-
-    def test_compute_n_recommendations_listing_id_not_found(self):
-        target_id = 9   # no match for this ID
-        num_of_recs = 1
-        # dict size exceeds sampling size
-        listing_dict = {
-            0: [-73.97237, 40.64749, 1, 149, 1, 9, 365],
-            1: [-73.97237, 40.04749, 1, 100, 5, 12, 365],
-            2: [-80.97237, 50.04749, 2, 1, 55, 999, 1],
-            3: [-90.97237, 60.04749, 2, 100, 55, 12, 1],
-            4: [-100.97237, 70.04749, 3, 100, 55, 12, 1],
-            5: [-90.97237, 80.04749, 3, 100, 55, 12, 1],
-            6: [-80.97237, 90.04749, 3, 100, 55, 12, 1],
-        }
-        with self.assertRaises(ValueError):
-            RecommendationsRepository().compute_n_recommendations(listing_dict, target_id, n=num_of_recs)
 
     def test_compute_n_recommendations_no_dict_provided(self):
-        target_id = 2539
+        target = Listing(2539, "listing", None, None, None, -73.97237, 40.64749, 'Single Room', 149, 1, 9, 365)
         num_of_recs = 1
         listing_dict = None
         with self.assertRaises(ValueError):
-            RecommendationsRepository().compute_n_recommendations(listing_dict, target_id, n=num_of_recs)
+            RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
 
     def test_compute_n_recommendations_no_target_id_provided(self):
-        target_id = None
+        target = None
         num_of_recs = 1
         # dict size is less than sampling size
         listing_dict = {
-            target_id: [-73.97237, 40.64749, 1, 149, 1, 9, 365],
-            1: [-70.97237, 40.04749, 1, 100, 5, 12, 365],
-            2: [-80.97237, 50.04749, 2, 100, 55, 12, 1]
+            1: [-73.97237, 40.64749, 1, 149, 1, 9, 365],
+            2: [-70.97237, 40.04749, 1, 100, 5, 12, 365],
+            3: [-80.97237, 50.04749, 2, 100, 55, 12, 1]
         }
         with self.assertRaises(ValueError):
-            RecommendationsRepository().compute_n_recommendations(listing_dict, target_id, n=num_of_recs)
+            RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
 
     ########################################
     #   Test: euclidean_distance    #

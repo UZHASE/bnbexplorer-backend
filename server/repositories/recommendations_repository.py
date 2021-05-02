@@ -25,6 +25,10 @@ class RecommendationsRepository(Repository):
         # precondition
         if n < 1:
             raise ValueError('Number of recommendations to compute must be at least 1')
+        # get target listing
+        target_listing = Listing_Repository().get_by_id(listing_id)
+        if not target_listing:
+            raise ValueError('No Listing found for given ID "{}"'.format(listing_id))
         # query building
         listing_query = Query \
             .from_(self.listings) \
@@ -39,28 +43,30 @@ class RecommendationsRepository(Repository):
         # execute query
         listings_dict = self.execute_select_query(listing_query.get_sql())
         # compute recommendations and get their IDs
-        rec_ids = self.compute_n_recommendations(listings_dict, listing_id, n)
+        rec_ids = self.compute_n_recommendations(listings_dict, target_listing, n)
         # fetch listings
         return Listing_Repository().get_all_by_id(rec_ids)
 
     @no_none_args
-    def compute_n_recommendations(self, listings_dict, target_id, n):
+    def compute_n_recommendations(self, listings_dict, target, n):
         """ Computes n recommendations for a given target Listing
 
         :param listings_dict: Listings returned based on filter criteria
-        :param target_id: ID of Listing
+        :param target: target Listing
         :param n: number of recommendations
         :return: IDs of recommendations
         :raises ValueError: if filter criteria was too restrictive or target cannot be found
         """
-        # precondition
-        try:
-            # keep track of ids and target index which we need to retrieve recommendations
-            id_list = list(listings_dict.keys())
-            target_idx = id_list.index(target_id)
-        except ValueError:
-            raise ValueError('Target Listing with ID {} cannot be found'.format(target_id))
-
+        # check if dict already contains target
+        if target.id not in listings_dict:
+            # add it
+            listings_dict[target.id] = [
+                target.longitude, target.latitude, self.map_rt(target.room_type), target.price,
+                target.min_nights, target.num_of_reviews, target. availability
+            ]
+        # need to keep track of id and index
+        id_list = list(listings_dict.keys())
+        target_idx = id_list.index(target.id)
         # scale rows between [0,1]
         scaled_rows = MinMaxScaler().fit_transform(list(listings_dict.values()))
         # compute euclidean distance of each row to target
@@ -71,13 +77,12 @@ class RecommendationsRepository(Repository):
         if k > len(listings_dict):
             # k must not exceed number of listings
             k = len(listings_dict)
+        # compute recommendations and save their indices
         rec_idx = NearestNeighbors(n_neighbors=k, algorithm='ball_tree') \
             .fit(scaled_rows) \
             .kneighbors([scaled_rows[target_idx]], k, return_distance=False)
         # gather index of recommendations
-        rec_ids = []
-        for rec in rec_idx[0]:
-            rec_ids.append(id_list[rec])
+        rec_ids = [id_list[rec] for rec in rec_idx[0]]
         # randomly sample n (excluding the target itself)
         return random.sample(rec_ids[1:], n)
 
