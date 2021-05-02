@@ -7,7 +7,7 @@ from typing import List, Dict  # noqa: F401
 
 from server.models.base_model_ import Model
 from server.models.layer_entry import LayerEntry  # noqa: F401,E501
-from server import util
+from server.utils import util
 
 
 class Layer(Model):

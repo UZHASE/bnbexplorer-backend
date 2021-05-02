@@ -7,10 +7,12 @@ from sklearn.neighbors import NearestNeighbors
 from server.dbutils.map_rt import MapRT
 from server.repositories.base_repository import Repository
 from server.repositories.listing_repsotory import Listing as Listing_Repository
+from server.utils.validation import no_none_args
 
 
 class RecommendationsRepository(Repository):
 
+    @no_none_args
     def recommend_n_listings(self, listing_id, request_filter, n=5):
         """ Recommend n Listings factoring in the provided filter criteria
 
@@ -20,14 +22,9 @@ class RecommendationsRepository(Repository):
         :return: recommended Listings
         :raises ValueError: if no ID or filter was provided or n < 1
         """
-        # preconditions
-        if request_filter is None:
-            raise ValueError('Filter is missing!')
-        if listing_id is None:
-            raise ValueError('Required parameter "listing_id" is missing!')
+        # precondition
         if n < 1:
             raise ValueError('Number of recommendations to compute must be at least 1')
-
         # query building
         listing_query = Query \
             .from_(self.listings) \
@@ -46,6 +43,7 @@ class RecommendationsRepository(Repository):
         # fetch listings
         return Listing_Repository().get_all_by_id(rec_ids)
 
+    @no_none_args
     def compute_n_recommendations(self, listings_dict, target_id, n):
         """ Computes n recommendations for a given target Listing
 
@@ -55,11 +53,7 @@ class RecommendationsRepository(Repository):
         :return: IDs of recommendations
         :raises ValueError: if filter criteria was too restrictive or target cannot be found
         """
-        # preconditions
-        if target_id is None:
-            raise ValueError('Required parameter "target_id" is missing!')
-        if listings_dict is None or not listings_dict:
-            raise ValueError('There are no listings that match the given filter criteria!')
+        # precondition
         try:
             # keep track of ids and target index which we need to retrieve recommendations
             id_list = list(listings_dict.keys())
@@ -87,6 +81,7 @@ class RecommendationsRepository(Repository):
         # randomly sample n (excluding the target itself)
         return random.sample(rec_ids[1:], n)
 
+    @no_none_args
     def euclidean_distance(self, target, row):
         """Computes euclidean distance between target and a given row.
         Formula: ∑ √(A - B)^2 , where A and B are useful values in a given target and row
@@ -94,10 +89,6 @@ class RecommendationsRepository(Repository):
         :param row: a row of our data
         :return: euclidean distance to target row
         """
-        # precondition
-        if target is None or row is None:
-            raise ValueError('Invalid values for "target" or "row!')
-
         distance = 0
         index = 0
         for val in row:
@@ -105,6 +96,7 @@ class RecommendationsRepository(Repository):
             index += 1
         return math.sqrt(distance)
 
+    @no_none_args
     def map_result(self, query_result):
         # object mapping
         ids = []
