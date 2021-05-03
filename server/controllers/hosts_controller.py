@@ -1,11 +1,5 @@
-import random
-
-import connexion
-import six
 from flask import jsonify
 
-from server.models.host import Host  # noqa: E501
-from server import util
 from server.repositories.host_repository import Host as Host_Repository
 
 

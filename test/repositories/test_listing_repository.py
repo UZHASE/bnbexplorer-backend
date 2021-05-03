@@ -24,6 +24,23 @@ class TestListing(TestCase):
         # no match: Listing is not present
         self.assertFalse(listing)
 
+    ########################
+    #   Test: get_all_by_id    #
+    ########################
+    def test_get_all_by_id_successful(self):
+        id_list = [1, 2539]
+        listings = Listing().get_all_by_id(id_list)
+        # only 1 match!
+        self.assertTrue(listings)
+        self.assertEqual(1, len(listings))
+
+    def test_get_all_by_id_not_found(self):
+        # expected no result for this ID
+        id_list = [1]
+        listings = Listing().get_all_by_id(id_list)
+        # no match: Listing is not present
+        self.assertFalse(listings)
+
     ######################
     #   Test: get_all    #
     ######################
@@ -631,7 +648,18 @@ class TestListing(TestCase):
             room_type="Entire home/apt"
         )
         expected_query = '''SELECT "listings"."id","listings"."name","listings"."neighbourhood","listings"."area","listings"."longitude","listings"."latitude","listings"."room_type" "roomType","listings"."price","listings"."min_nights" "minNights","listings"."num_of_reviews" "numOfReviews","listings"."availability","hosts"."id" "host_id","hosts"."name" "host_name","hosts"."num_of_listings" FROM "listings" JOIN "hosts" ON "listings"."host_id"="hosts"."id" WHERE LOWER("listings"."name") LIKE LOWER('Park Slope Apartment %') AND "hosts"."id"=4330726 AND LOWER("hosts"."name") LIKE LOWER('Jon%') AND LOWER("listings"."neighbourhood")=LOWER('Brooklyn') AND LOWER("listings"."area")=LOWER('Park Slope') AND "listings"."price">=155 AND "listings"."price"<=155 AND "listings"."min_nights">=5 AND "listings"."availability">=189 AND "hosts"."num_of_listings">=1 AND LOWER("listings"."room_type")=LOWER('Entire home/apt') LIMIT 1000'''
-        actual_query = Listing().build_get_all_query(given_filter)
+        actual_query = Listing().build_get_all_query(given_filter).get_sql()
+        # expected query matches actual query
+        self.assertEqual(expected_query, actual_query)
+
+    #########################################
+    #   'build_get_all_by_id_query' tests   #
+    #########################################
+    def test_build_get_all_by_id_query(self):
+        # build_get_all_by_id_query
+        given_ids = [1, 2, 3]
+        expected_query = '''SELECT "listings"."id","listings"."name","listings"."neighbourhood","listings"."area","listings"."longitude","listings"."latitude","listings"."room_type" "roomType","listings"."price","listings"."min_nights" "minNights","listings"."num_of_reviews" "numOfReviews","listings"."availability","hosts"."id" "host_id","hosts"."name" "host_name","hosts"."num_of_listings" FROM "listings" JOIN "hosts" ON "listings"."host_id"="hosts"."id" WHERE "listings"."id" IN (1,2,3)'''
+        actual_query = Listing().build_get_all_by_id_query(given_ids).get_sql()
         # expected query matches actual query
         self.assertEqual(expected_query, actual_query)
 

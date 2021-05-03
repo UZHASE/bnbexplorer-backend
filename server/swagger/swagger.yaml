@@ -334,10 +334,18 @@ paths:
     get:
       tags:
       - Recommendations
-      summary: Recommend AirBnBs based on provided filter criteria
-      description: Returns a list of recommended Listings
+      summary: Recommend AirBnBs based on a provided target Listing and filter criteria
+      description: Returns a list of recommended Listings based on the provided target Listing and filter criteria
       operationId: recommend_listings
       parameters:
+      - name: listingId
+        in: query
+        description: ID of target Listing to compute similarity
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
       - name: listingName
         in: query
         description: Name to match Listings (can bei either exact match or not)
@@ -345,16 +353,23 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       - name: hostName
         in: query
-        description: Name to match Hosts of Listings (can bei either exact match or
-          not)
+        description: Name to match Hosts of Listings (can bei either exact match or not)
         required: false
         style: form
         explode: true
         schema:
           type: string
+      - name: hostId
+        in: query
+        description: ID of host to match Listings
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
       - name: location
         in: query
         description: Filter Listings by their location

@@ -4,7 +4,7 @@ import connexion
 import os
 
 from flask_cors import CORS
-from server import encoder
+from server.utils import encoder
 from dotenv import load_dotenv
 from distutils import util
 

@@ -1,10 +1,7 @@
-import connexion
-import six
 from flask import jsonify
 
 from server.models.layer import Layer
 from server.repositories.layer_repository import Layer as Layer_Repository
-from server import util
 from server.repositories.layer_strategy import CrimeLayerStrategy, HealthLayerStrategy, ComplaintLayerStrategy
 
 
