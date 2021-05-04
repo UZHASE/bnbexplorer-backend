@@ -15,9 +15,9 @@ def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_na
     :param host_name: Name to match Hosts of Listings (can bei either exact match or not)
     :type host_name: str
     :param location: Filter Listings by their location
-    :type location: str
+    :type location: list of str
     :param area: Filter Listings by their area
-    :type area: str
+    :type area: list of str
     :param price_min: Filter Listings by minimum price
     :type price_min: int
     :param price_max: Filter Listings by maximum price
@@ -29,9 +29,9 @@ def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_na
     :param listings_per_host: Filter Listings by the number of Listings per Host
     :type listings_per_host: int
     :param room_type: Filter Listings by room type
-    :type room_type: str
+    :type room_type: list of str
 
-    :rtype: List[Listing]
+    :rtype: list of Listing
     """
     # provided filter options
     request_filter = ListingsFilter(

@@ -77,18 +77,20 @@ class Listing(Repository):
 
     def add_where_clauses(self, query, filter):
         # WHERE clauses
-        if filter.listing_name is not None:
+        if filter.listing_name:
             query = query.where(Lower(self.listings.name).like(Lower(filter.listing_name + '%')))
         if filter.host_id is not None:
             query = query.where(self.hosts.id == filter.host_id)
-        if filter.host_name is not None:
+        if filter.host_name:
             query = query.where(Lower(self.hosts.name).like(Lower(filter.host_name + '%')))
-        if filter.neighbourhood is not None:
-            # TODO: We can accept a list and use SQL's IN function to filter for the given values
-            query = query.where(Lower(self.listings.neighbourhood) == Lower(filter.neighbourhood))
-        if filter.area is not None:
-            # TODO: We can accept a list and use SQL's IN function to filter for the given values
-            query = query.where(Lower(self.listings.area) == Lower(filter.area))
+        if filter.neighbourhood:
+            # to lowercase for string comparison
+            filter.neighbourhood = [n.lower() for n in filter.neighbourhood]
+            query = query.where((Lower(self.listings.neighbourhood)).isin(filter.neighbourhood))
+        if filter.area:
+            # to lowercase for string comparison
+            filter.area = [a.lower() for a in filter.area]
+            query = query.where((Lower(self.listings.area)).isin(filter.area))
         if filter.price_min is not None:
             query = query.where(self.listings.price >= filter.price_min)
         if filter.price_max is not None:
@@ -101,9 +103,10 @@ class Listing(Repository):
         if filter.listings_per_host is not None:
             # TODO: Should this input be handled as an enum, or min/max values? (currently: min value)
             query = query.where(self.hosts.num_of_listings >= filter.listings_per_host)
-        if filter.room_type is not None:
-            # TODO: We can accept a list and use SQL's IN function to filter for the given values
-            query = query.where(Lower(self.listings.room_type) == Lower(filter.room_type))
+        if filter.room_type:
+            # to lowercase for string comparison
+            filter.room_type = [a.lower() for a in filter.room_type]
+            query = query.where((Lower(self.listings.room_type)).isin(filter.room_type))
         return query
 
     def get_metadata(self):
