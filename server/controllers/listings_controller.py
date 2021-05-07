@@ -64,7 +64,17 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
         listings_per_host,
         room_type
     )
-    return jsonify(Listing_Repository().get_all(request_filter))
+
+    listings = [
+        {
+            "id": listing.id,
+            "longitude": listing.longitude,
+            "latitude": listing.latitude
+        }
+        for listing in Listing_Repository().get_all(request_filter)
+    ]
+
+    return jsonify(listings)
 
 
 def find_reviews_for_listing(listing_id):
@@ -79,6 +89,7 @@ def find_reviews_for_listing(listing_id):
     """
 
     return jsonify(Review_Repository().get_all_by_listing_id(listing_id))
+
 
 def get_metadata():
     """Get metadata about all listings
