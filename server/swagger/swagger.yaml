@@ -102,7 +102,9 @@ paths:
         style: form
         explode: true
         schema:
-          type: string
+          type: array
+          items:
+            type: string
       - name: area
         in: query
         description: Filter Listings by their area
@@ -110,7 +112,9 @@ paths:
         style: form
         explode: true
         schema:
-          type: string
+          type: array
+          items:
+            type: string
       - name: priceMin
         in: query
         description: Filter Listings by minimum price
@@ -158,7 +162,9 @@ paths:
         style: form
         explode: true
         schema:
-          type: string
+          type: array
+          items:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -377,7 +383,9 @@ paths:
         style: form
         explode: true
         schema:
-          type: string
+          type: array
+          items:
+            type: string
       - name: area
         in: query
         description: Filter Listings by their area
@@ -385,7 +393,9 @@ paths:
         style: form
         explode: true
         schema:
-          type: string
+          type: array
+          items:
+            type: string
       - name: priceMin
         in: query
         description: Filter Listings by minimum price
@@ -433,7 +443,9 @@ paths:
         style: form
         explode: true
         schema:
-          type: string
+          type: array
+          items:
+            type: string
       responses:
         "200":
           description: Successful operation

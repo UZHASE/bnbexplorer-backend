@@ -57,17 +57,55 @@ class TestListing(TestCase):
             listing_name="",
             host_id=None,
             host_name="",
-            neighbourhood="",
-            area="",
+            neighbourhood=None,
+            area=None,
             price_min=None,
             price_max=None,
             min_nights=None,
             availability=None,
             listings_per_host=None,
-            room_type=""
+            room_type=None
         )
         listings = Listing().get_all(given_filter)
-        # no matches
+        # entering blank strings is equal to entering no input: returns 1000 because of LIMIT clause
+        self.assertEqual(1000, len(listings))
+
+    def test_get_all_with_filter_array_params_empty(self):
+        # no filter params = retrieve all Listings
+        given_filter = ListingsFilter(
+            listing_name="",
+            host_id=None,
+            host_name="",
+            neighbourhood=[],
+            area=[],
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=[]
+        )
+        listings = Listing().get_all(given_filter)
+        # entering blank strings is equal to entering no input: returns 1000 because of LIMIT clause
+        self.assertEqual(1000, len(listings))
+
+    def test_get_all_with_filter_array_params_no_matches(self):
+        # no filter params = retrieve all Listings
+        given_filter = ListingsFilter(
+            listing_name="",
+            host_id=None,
+            host_name="",
+            neighbourhood=["no match for this value"],
+            area=["no match for this value"],
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=["no match for this value"]
+        )
+        listings = Listing().get_all(given_filter)
+        # entering blank strings is equal to entering no input: returns 1000 because of LIMIT clause
         self.assertEqual(0, len(listings))
 
     def test_get_all_with_filter_blank_str_values(self):
@@ -76,14 +114,14 @@ class TestListing(TestCase):
             listing_name=" ",
             host_id=None,
             host_name=" ",
-            neighbourhood=" ",
-            area=" ",
+            neighbourhood=None,
+            area=None,
             price_min=None,
             price_max=None,
             min_nights=None,
             availability=None,
             listings_per_host=None,
-            room_type=" "
+            room_type=None
         )
         listings = Listing().get_all(given_filter)
         # no matches
@@ -95,14 +133,14 @@ class TestListing(TestCase):
             listing_name="Park Slope Apartment ",
             host_id=4330726,
             host_name="Jon",
-            neighbourhood="Brooklyn",
-            area="Park Slope",
+            neighbourhood=["Brooklyn"],
+            area=["Park Slope"],
             price_min=155,
             price_max=155,
             min_nights=5,
             availability=189,
             listings_per_host=1,
-            room_type="Entire home/apt"
+            room_type=["Entire home/apt"]
         )
         listings = Listing().get_all(given_filter)
         # exact match
@@ -297,8 +335,8 @@ class TestListing(TestCase):
             listing_name=None,
             host_id=None,
             host_name=None,
-            neighbourhood='Brooklyn',
-            area='Kensington',
+            neighbourhood=['Brooklyn'],
+            area=['Kensington'],
             price_min=None,
             price_max=None,
             min_nights=None,
@@ -310,14 +348,33 @@ class TestListing(TestCase):
         # several matches
         self.assertEqual(35, len(listings))
 
+    def test_get_all_with_filter_several_matches_by_neighbourhood_and_area_multiple_input(self):
+        # filter by 'neighbourhood'  and 'area'
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=['Brooklyn', 'Manhattan'],
+            area=['Kensington', 'Inwood'],
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None
+        )
+        listings = Listing().get_all(given_filter)
+        # several matches
+        self.assertEqual(80, len(listings))
+
     def test_get_all_with_filter_no_match_by_neighbourhood_and_area(self):
         # filter by 'neighbourhood' and 'area'
         given_filter = ListingsFilter(
             listing_name=None,
             host_id=None,
             host_name=None,
-            neighbourhood='Brooklyn',
-            area='Inwood',
+            neighbourhood=['Brooklyn'],
+            area=['Inwood'],
             price_min=None,
             price_max=None,
             min_nights=None,
@@ -591,7 +648,7 @@ class TestListing(TestCase):
     #########################
     #   'room_type' tests   #
     #########################
-    def test_get_all_with_filter_exact_match_by_room_type(self):
+    def test_get_all_with_filter_match_by_room_type(self):
         # filter by 'room_type'
         given_filter = ListingsFilter(
             listing_name=None,
@@ -604,7 +661,26 @@ class TestListing(TestCase):
             min_nights=None,
             availability=None,
             listings_per_host=None,
-            room_type='Private Room'
+            room_type=["Private Room"]
+        )
+        listings = Listing().get_all(given_filter)
+        # several matches
+        self.assertEqual(1000, len(listings))
+
+    def test_get_all_with_filter_match_by_multiple_room_types(self):
+        # filter by 'room_type'
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=["Private Room", "Entire home/apt"]
         )
         listings = Listing().get_all(given_filter)
         # several matches
@@ -623,7 +699,7 @@ class TestListing(TestCase):
             min_nights=None,
             availability=None,
             listings_per_host=None,
-            room_type='Room'
+            room_type=['Room']
         )
         listings = Listing().get_all(given_filter)
         # no matches
@@ -638,16 +714,16 @@ class TestListing(TestCase):
             listing_name="Park Slope Apartment ",
             host_id=4330726,
             host_name="Jon",
-            neighbourhood="Brooklyn",
-            area="Park Slope",
+            neighbourhood=["Brooklyn"],
+            area=["Park Slope"],
             price_min=155,
             price_max=155,
             min_nights=5,
             availability=189,
             listings_per_host=1,
-            room_type="Entire home/apt"
+            room_type=["Entire home/apt"]
         )
-        expected_query = '''SELECT "listings"."id","listings"."name","listings"."neighbourhood","listings"."area","listings"."longitude","listings"."latitude","listings"."room_type" "roomType","listings"."price","listings"."min_nights" "minNights","listings"."num_of_reviews" "numOfReviews","listings"."availability","hosts"."id" "host_id","hosts"."name" "host_name","hosts"."num_of_listings" FROM "listings" JOIN "hosts" ON "listings"."host_id"="hosts"."id" WHERE LOWER("listings"."name") LIKE LOWER('Park Slope Apartment %') AND "hosts"."id"=4330726 AND LOWER("hosts"."name") LIKE LOWER('Jon%') AND LOWER("listings"."neighbourhood")=LOWER('Brooklyn') AND LOWER("listings"."area")=LOWER('Park Slope') AND "listings"."price">=155 AND "listings"."price"<=155 AND "listings"."min_nights">=5 AND "listings"."availability">=189 AND "hosts"."num_of_listings">=1 AND LOWER("listings"."room_type")=LOWER('Entire home/apt') LIMIT 1000'''
+        expected_query = '''SELECT "listings"."id","listings"."name","listings"."neighbourhood","listings"."area","listings"."longitude","listings"."latitude","listings"."room_type" "roomType","listings"."price","listings"."min_nights" "minNights","listings"."num_of_reviews" "numOfReviews","listings"."availability","hosts"."id" "host_id","hosts"."name" "host_name","hosts"."num_of_listings" FROM "listings" JOIN "hosts" ON "listings"."host_id"="hosts"."id" WHERE LOWER("listings"."name") LIKE LOWER('Park Slope Apartment %') AND "hosts"."id"=4330726 AND LOWER("hosts"."name") LIKE LOWER('Jon%') AND LOWER("listings"."neighbourhood") IN ('brooklyn') AND LOWER("listings"."area") IN ('park slope') AND "listings"."price">=155 AND "listings"."price"<=155 AND "listings"."min_nights">=5 AND "listings"."availability">=189 AND "hosts"."num_of_listings">=1 AND LOWER("listings"."room_type") IN ('entire home/apt') LIMIT 1000'''
         actual_query = Listing().build_get_all_query(given_filter).get_sql()
         # expected query matches actual query
         self.assertEqual(expected_query, actual_query)

@@ -20,10 +20,10 @@ def find_listing_by_id(listing_id):
 
 def find_listings(listing_name=None, host_id=None, host_name=None, location=None, area=None, price_min=None,
                   price_max=None, min_nights=None, availability=None, listings_per_host=None,
-                  room_type=None):  # noqa: E501
+                  room_type=None):
     """Retrieve NYC AirBnB listings
 
-    Returns a list of AirBnB Listings based on the provided filter criteria # noqa: E501
+    Returns a list of AirBnB Listings based on the provided filter criteria
 
     :param listing_name: Name to match Listings (can bei either exact match or not)
     :type listing_name: str
@@ -32,9 +32,9 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
     :param host_name: Name to match Hosts of Listings (can bei either exact match or not)
     :type host_name: str
     :param location: Filter Listings by their location
-    :type location: str
+    :type location: list of str
     :param area: Filter Listings by their area
-    :type area: str
+    :type area: list of str
     :param price_min: Filter Listings by minimum price
     :type price_min: int
     :param price_max: Filter Listings by maximum price
@@ -46,7 +46,7 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
     :param listings_per_host: Filter Listings by the number of Listings per Host
     :type listings_per_host: int
     :param room_type: Filter Listings by room type
-    :type room_type: str
+    :type room_type: list of str
 
     :rtype: List[Listing]
     """
@@ -70,7 +70,7 @@ def find_listings(listing_name=None, host_id=None, host_name=None, location=None
 def find_reviews_for_listing(listing_id):
     """Find Reviews for a given Listing
 
-    Returns all Reviews for a single Listing matching the given ID # noqa: E501
+    Returns all Reviews for a single Listing matching the given ID
 
     :param listing_id: ID of Listing to return Reviews
     :type listing_id: int

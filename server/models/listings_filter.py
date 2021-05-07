@@ -11,9 +11,9 @@ class ListingsFilter:
         :param host_name: Filter by Host name
         :type host_name: str
         :param neighbourhood:  Filter by neighbourhood of Listing
-        :type neighbourhood: str
+        :type neighbourhood: list of str
         :param area: Filter by area of Listing
-        :type area: str
+        :type area: list of str
         :param price_min: Filter by min price of Listings
         :type price_min: int
         :param price_max: Filter by max price of Listings
@@ -25,7 +25,7 @@ class ListingsFilter:
         :param listings_per_host: Filter by number of Listings per Host
         :type listings_per_host: int
         :param room_type: Filter by room type of Listings
-        :type room_type: str
+        :type room_type: list of str
          """
         self.listing_name = listing_name
         self.host_id = host_id
