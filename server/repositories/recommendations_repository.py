@@ -32,6 +32,7 @@ class RecommendationsRepository(Repository):
         # query building
         listing_query = Query \
             .from_(self.listings) \
+            .join(self.hosts).on(self.listings.host_id == self.hosts.id)\
             .select(
                 # the relevant fields to compute row similarity (encode room_type)
                 self.listings.id, self.listings.longitude, self.listings.latitude,
@@ -67,6 +68,9 @@ class RecommendationsRepository(Repository):
         # need to keep track of id and index
         id_list = list(listings_dict.keys())
         target_idx = id_list.index(target.id)
+        # we need a listing set of least n+1 to compute n recommendations (the listing itself is the +1)
+        if len(id_list) < n + 1:
+            raise ValueError("The provided filter criteria are too restrictive!")
         # scale rows between [0,1]
         scaled_rows = MinMaxScaler().fit_transform(list(listings_dict.values()))
         # compute euclidean distance of each row to target

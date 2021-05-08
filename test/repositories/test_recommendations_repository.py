@@ -10,13 +10,263 @@ class TestRecommendations(TestCase):
     ########################################
     #   Test: test_recommend_n_listings    #
     ########################################
-    def test_recommend_n_listings_successful(self):
+    def test_recommend_n_listings_successful_with_empty_filter(self):
         target_id = 2539
         default_num_of_recs = 5
         recommendations = RecommendationsRepository().recommend_n_listings(target_id, ListingsFilter())
         # matches a listing with given ID
         self.assertTrue(recommendations)
         self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_full_filter(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None, # to not be too restrictive, we need a result set and not an exact match
+            host_id=None,  # to not be too restrictive, we need a result set and not an exact match
+            host_name="John",
+            neighbourhood=["Brooklyn"],
+            area=None, # to not be too restrictive, we need a result set and not an exact match
+            price_min=50,
+            price_max=500,
+            min_nights=1,
+            availability=1,
+            listings_per_host=1,
+            room_type=None  # to not be too restrictive, we need a result set and not an exact match
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_listing_name(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name="a",
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None  # to not be too restrictive, we need a result set and not an exact match
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_host_id(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=190921808,  # expected to have many listings for this host
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_host_name(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name="John",  # expected to have many listings for this host
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_neighbourhood(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=['Brooklyn'],
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_area(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=['Flatlands'],
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_price_min(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=1,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_price_max(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=200,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_availability(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=100,
+            listings_per_host=None,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_listings_per_host(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=1,
+            room_type=None
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_successful_with_room_type(self):
+        target_id = 2539
+        default_num_of_recs = 5
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name=None,
+            neighbourhood=None,
+            area=None,
+            price_min=None,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=['Entire home/apt']
+        )
+        recommendations = RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        # matches a listing with given ID
+        self.assertTrue(recommendations)
+        self.assertEqual(default_num_of_recs, len(recommendations))
+
+    def test_recommend_n_listings_unsuccessful_filters_too_restrictive(self):
+        target_id = 2539
+        given_filter = ListingsFilter(
+            listing_name=None,
+            host_id=None,
+            host_name='John',
+            neighbourhood=None,
+            area=None,
+            price_min=500,
+            price_max=None,
+            min_nights=None,
+            availability=None,
+            listings_per_host=None,
+            room_type=['Entire home/apt']
+        )
+        # filters are too restrictive!
+        with self.assertRaises(ValueError):
+            RecommendationsRepository().recommend_n_listings(target_id, given_filter)
 
     def test_recommend_n_listings_successful_return_1_recommendation(self):
         target_id = 2539
