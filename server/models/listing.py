@@ -15,7 +15,7 @@ class Listing(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, id: int=None, name: str=None, host: Host=None, neighbourhood: str=None, area: str=None, latitude: float=None, longitude: float=None, room_type: str=None, price: int=None, min_nights: int=None, num_of_reviews: int=None, availability: int=None):  # noqa: E501
+    def __init__(self, id: int=None, name: str=None, host: Host=None, neighbourhood: str=None, area: str=None, latitude: float=None, longitude: float=None, room_type: str=None, price: int=None, min_nights: int=None, num_of_reviews: int=None, availability: int=None, images: list=None):  # noqa: E501
         """Listing - a model defined in Swagger
 
         :param id: The id of this Listing.  # noqa: E501
@@ -42,7 +42,11 @@ class Listing(Model):
         :type num_of_reviews: int
         :param availability: The availability of this Listing.  # noqa: E501
         :type availability: int
+        :param images: Images of this Listing.
+        :type images: list
         """
+        if images is None:
+            images = []
         self.swagger_types = {
             'id': int,
             'name': str,
@@ -55,7 +59,8 @@ class Listing(Model):
             'price': int,
             'min_nights': int,
             'num_of_reviews': int,
-            'availability': int
+            'availability': int,
+            'images': list,
         }
 
         self.attribute_map = {
@@ -70,7 +75,8 @@ class Listing(Model):
             'price': 'price',
             'min_nights': 'minNights',
             'num_of_reviews': 'numOfReviews',
-            'availability': 'availability'
+            'availability': 'availability',
+            'images': 'images'
         }
         self._id = id
         self._name = name
@@ -84,6 +90,7 @@ class Listing(Model):
         self._min_nights = min_nights
         self._num_of_reviews = num_of_reviews
         self._availability = availability
+        self._images = images
 
     @classmethod
     def from_dict(cls, dikt) -> 'Listing':
@@ -347,3 +354,25 @@ class Listing(Model):
         """
 
         self._availability = availability
+
+
+    @property
+    def images(self) -> list:
+        """Gets images of this listing.
+
+
+        :return: List of images.
+        :rtype: list
+        """
+        return self._images
+
+    @images.setter
+    def images(self, images: list):
+        """Sets the images of this Listing.
+
+
+        :param images: The images of this Listing.
+        :type images: list
+        """
+
+        self._images = images

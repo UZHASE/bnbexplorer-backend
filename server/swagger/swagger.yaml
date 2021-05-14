@@ -488,6 +488,10 @@ components:
           type: integer
         availability:
           type: integer
+        images:
+          type: array
+          items:
+            type: string
       example:
         area: Kensington
         numOfReviews: 9
@@ -504,6 +508,7 @@ components:
         availability: 3
         roomType: Private Room
         longitude: 5.63737665663332876420099637471139430999755859375
+        images: ['https://example.com/path_to_image_1', 'https://example.com/path_to_image_2']
     Host:
       type: object
       properties:
