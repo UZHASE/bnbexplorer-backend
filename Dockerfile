@@ -4,7 +4,7 @@ ADD . /bnbexplorer-backend/
 
 WORKDIR /bnbexplorer-backend
 
-RUN apt-get update && apt-get install python3-sphinx -y
+RUN apt-get update && apt-get install python3-sphinx -y && apt-get install git
 
 RUN pip3 install --quiet --no-cache-dir -r requirements.txt
 

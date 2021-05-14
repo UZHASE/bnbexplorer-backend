@@ -21,7 +21,7 @@ script:
   # other script steps might be done before running the actual analysis
   - pytest --cov=server --rootdir=. && coverage xml # set rootdir because of relative path for SQLite connections
   - sonar-scanner
-  - cd docs && sphinx-apidoc -o . ../ ../test && make html && cp /_build/html/* /_build/UZHASE.github.io/ && git add . && git commit -m"Update documentation" && git push origin master
+  - cd docs/ && sphinx-apidoc -o . ../ ../test && make html && cp _build/html/* _build/UZHASE.github.io -rf && cd _build/UZHASE.github.io && git add . && git commit -m"Generate documentation" && git push origin master
 
 branches:
   only:
