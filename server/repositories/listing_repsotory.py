@@ -10,12 +10,15 @@ class Listing(Repository):
 
     def get_by_id(self, listing_id):
         # build query
-        query = self.build_get_by_id_query(listing_id)
+        listing_query = self.build_get_by_id_query(listing_id)
         # execute query always returns a (singleton ot empty) list, but we need the Listing object
-        listing = self.execute_select_query(query.get_sql())
+        images = self._db.execute('''SELECT urls FROM listings_images WHERE listing_id = ?''', (listing_id,)).fetchone()
+        listing = self.execute_select_query(listing_query.get_sql())
+
         if listing:
-            # we have a match, unpack the Listing
-            listing = listing[0]
+            listing[0].images = images['urls'].split(' ') if images else []
+            return listing[0]
+
         return listing
 
     def get_all_by_id(self, id_list):
