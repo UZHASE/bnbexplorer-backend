@@ -55,9 +55,9 @@ class RecommendationsRepository(Repository):
         :param listings_dict: Listings returned based on filter criteria
         :param target: target Listing
         :param n: number of recommendations
-        :return: IDs of recommendations
-        :raises ValueError: if filter criteria was too restrictive or target cannot be found
+        :return: IDs of recommendations (or an empty list if the provided filter criteria is too restrictive)
         """
+        recommended_listings = []
         # check if dict already contains target
         if target.id not in listings_dict:
             # add it
@@ -69,26 +69,27 @@ class RecommendationsRepository(Repository):
         id_list = list(listings_dict.keys())
         target_idx = id_list.index(target.id)
         # we need a listing set of least n+1 to compute n recommendations (the listing itself is the +1)
-        if len(id_list) < n + 1:
-            raise ValueError("The provided filter criteria are too restrictive!")
-        # scale rows between [0,1]
-        scaled_rows = MinMaxScaler().fit_transform(list(listings_dict.values()))
-        # compute euclidean distance of each row to target
-        [self.euclidean_distance(row, scaled_rows[target_idx]) for row in scaled_rows]
-        # compute recommendations: We want to compute more recommendations and then randomly sample a subset
-        # first element is target itself, therefore we compute one additional rec.
-        k = n * 4 + 1
-        if k > len(listings_dict):
-            # k must not exceed number of listings
-            k = len(listings_dict)
-        # compute recommendations and save their indices
-        rec_idx = NearestNeighbors(n_neighbors=k, algorithm='ball_tree') \
-            .fit(scaled_rows) \
-            .kneighbors([scaled_rows[target_idx]], k, return_distance=False)
-        # gather index of recommendations
-        rec_ids = [id_list[rec] for rec in rec_idx[0]]
-        # randomly sample n (excluding the target itself)
-        return random.sample(rec_ids[1:], n)
+        if len(id_list) >= n + 1:
+            # scale rows between [0,1]
+            scaled_rows = MinMaxScaler().fit_transform(list(listings_dict.values()))
+            # compute euclidean distance of each row to target
+            [self.euclidean_distance(row, scaled_rows[target_idx]) for row in scaled_rows]
+            # compute recommendations: We want to compute more recommendations and then randomly sample a subset
+            # first element is target itself, therefore we compute one additional rec.
+            k = n * 4 + 1
+            if k > len(listings_dict):
+                # k must not exceed number of listings
+                k = len(listings_dict)
+            # compute recommendations and save their indices
+            rec_idx = NearestNeighbors(n_neighbors=k, algorithm='ball_tree') \
+                .fit(scaled_rows) \
+                .kneighbors([scaled_rows[target_idx]], k, return_distance=False)
+            # gather index of recommendations
+            rec_ids = [id_list[rec] for rec in rec_idx[0]]
+            # randomly sample n (excluding the target itself)
+            recommended_listings = random.sample(rec_ids[1:], n)
+
+        return recommended_listings
 
     @no_none_args
     def euclidean_distance(self, target, row):

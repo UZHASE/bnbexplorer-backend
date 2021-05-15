@@ -251,6 +251,7 @@ class TestRecommendations(TestCase):
 
     def test_recommend_n_listings_unsuccessful_filters_too_restrictive(self):
         target_id = 2539
+        expected_result = []
         given_filter = ListingsFilter(
             listing_name=None,
             host_id=None,
@@ -265,8 +266,7 @@ class TestRecommendations(TestCase):
             room_type=['Entire home/apt']
         )
         # filters are too restrictive!
-        with self.assertRaises(ValueError):
-            RecommendationsRepository().recommend_n_listings(target_id, given_filter)
+        self.assertEqual(expected_result, RecommendationsRepository().recommend_n_listings(target_id, given_filter))
 
     def test_recommend_n_listings_successful_return_1_recommendation(self):
         target_id = 2539
