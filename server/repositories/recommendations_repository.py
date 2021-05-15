@@ -69,7 +69,7 @@ class RecommendationsRepository(Repository):
         id_list = list(listings_dict.keys())
         target_idx = id_list.index(target.id)
         # we need a listing set of least n+1 to compute n recommendations (the listing itself is the +1)
-        if len(id_list) > n + 1:
+        if len(id_list) >= n + 1:
             # scale rows between [0,1]
             scaled_rows = MinMaxScaler().fit_transform(list(listings_dict.values()))
             # compute euclidean distance of each row to target
