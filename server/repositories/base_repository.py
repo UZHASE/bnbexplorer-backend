@@ -24,19 +24,18 @@ class Repository(object):
         :param room_type: room_type string to map
         :return: numerical encoding of room_type
         """
-        try:
-            if room_type is not None:
-                if room_type == 'Private room':
-                    return 1
-                elif room_type == 'Entire home/apt':
-                    return 2
-                elif room_type == 'Shared Room':
-                    return 3
-                else:
-                    return 0
+        if room_type is not None:
+            if room_type == 'Private room':
+                return 1
+            elif room_type == 'Entire home/apt':
+                return 2
+            elif room_type == 'Shared Room':
+                return 3
             else:
+                # fallback
                 return 0
-        except:
+        else:
+            # fallback
             return 0
 
     def execute_select_query(self, query):
