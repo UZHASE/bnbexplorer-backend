@@ -8,7 +8,7 @@ class BaseRepositoryTest(TestCase):
     def test_base_repository_methods_not_implemented(self):
         with self.assertRaises(NotImplementedError):
             # method is not implemented
-            Repository().map_result(None)
+            Repository()._map_result(None)
 
     def test_map_rt_private_room(self):
         input = 'Private room'

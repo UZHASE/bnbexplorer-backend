@@ -2,10 +2,13 @@ from server.models.listings_filter import ListingsFilter
 from server.repositories.recommendations_repository import RecommendationsRepository as Recommendations_Repository
 
 
-def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_name=None, location=None, area=None, price_min=None, price_max=None, min_nights=None, availability=None, listings_per_host=None, room_type=None):  # noqa: E501
+def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_name=None,
+                       location=None, area=None, price_min=None, price_max=None, min_nights=None,
+                       availability=None, listings_per_host=None, room_type=None):
     """Recommend AirBnBs based on provided filter criteria
 
-    Returns a list of recommended Listings
+    Returns a list of recommended Listings based on a provided Listing and taking filter criteria into account
+
     :param listing_id: target Listing ID
     :type listing_id: int
     :param host_id: host ID
@@ -31,7 +34,7 @@ def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_na
     :param room_type: Filter Listings by room type
     :type room_type: list of str
 
-    :rtype: list of Listing
+    :rtype: List[Listing]
     """
     # provided filter options
     request_filter = ListingsFilter(
@@ -48,14 +51,3 @@ def recommend_listings(listing_id=None, host_id=None, listing_name=None, host_na
         room_type
     )
     return Recommendations_Repository().recommend_n_listings(listing_id, request_filter)
-
-
-def recommend_listings_for_attractions():
-    """Recommend closest AirBnBs based on a list of Attractions
-
-    Returns a list of recommended Listings
-
-
-    :rtype: List[Listing]
-    """
-    return 'do some magic!'

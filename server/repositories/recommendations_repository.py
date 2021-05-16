@@ -11,6 +11,7 @@ from server.utils.validation import no_none_args
 
 
 class RecommendationsRepository(Repository):
+    """Repository to compute Recommendations"""
 
     @no_none_args
     def recommend_n_listings(self, listing_id, request_filter, n=5):
@@ -42,14 +43,14 @@ class RecommendationsRepository(Repository):
         # add filter criteria
         listing_query = Listing_Repository().add_where_clauses(listing_query, request_filter)
         # execute query
-        listings_dict = self.execute_select_query(listing_query.get_sql())
+        listings_dict = self._execute_select_query(listing_query.get_sql())
         # compute recommendations and get their IDs
-        rec_ids = self.compute_n_recommendations(listings_dict, target_listing, n)
+        rec_ids = self._compute_n_recommendations(listings_dict, target_listing, n)
         # fetch listings
         return Listing_Repository().get_all_by_id(rec_ids)
 
     @no_none_args
-    def compute_n_recommendations(self, listings_dict, target, n):
+    def _compute_n_recommendations(self, listings_dict, target, n):
         """ Computes n recommendations for a given target Listing
 
         :param listings_dict: Listings returned based on filter criteria
@@ -73,7 +74,7 @@ class RecommendationsRepository(Repository):
             # scale rows between [0,1]
             scaled_rows = MinMaxScaler().fit_transform(list(listings_dict.values()))
             # compute euclidean distance of each row to target
-            [self.euclidean_distance(row, scaled_rows[target_idx]) for row in scaled_rows]
+            [self._euclidean_distance(row, scaled_rows[target_idx]) for row in scaled_rows]
             # compute recommendations: We want to compute more recommendations and then randomly sample a subset
             # first element is target itself, therefore we compute one additional rec.
             k = n * 4 + 1
@@ -92,7 +93,7 @@ class RecommendationsRepository(Repository):
         return recommended_listings
 
     @no_none_args
-    def euclidean_distance(self, target, row):
+    def _euclidean_distance(self, target, row):
         """Computes euclidean distance between target and a given row.
         Formula: ∑ √(A - B)^2 , where A and B are useful values in a given target and row
         :param target: target row to compute distance
@@ -107,7 +108,7 @@ class RecommendationsRepository(Repository):
         return math.sqrt(distance)
 
     @no_none_args
-    def map_result(self, query_result):
+    def _map_result(self, query_result):
         # object mapping
         ids = []
         rows = []

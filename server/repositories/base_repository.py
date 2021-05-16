@@ -5,6 +5,8 @@ from pypika import Table
 
 
 class Repository(object):
+    """Repository base class defining common methods
+    """
     # tables
     listings = Table('listings')
     hosts = Table('hosts')
@@ -19,7 +21,7 @@ class Repository(object):
         self._db = self.__connection.cursor()
 
     def map_rt(self, room_type):
-        """ Method to map room_type field in a query
+        """Method to map room_type field in a query
 
         :param room_type: room_type string to map
         :return: numerical encoding of room_type
@@ -38,12 +40,21 @@ class Repository(object):
             # fallback
             return 0
 
-    def execute_select_query(self, query):
+    def _execute_select_query(self, query):
+        """Template method defining the basic procedure for SELECT query execution
+
+        :param query: SELECT query to be executed
+        :return: result set of mapped object(s)
+        """
         # execute query
         query_results = self._db.execute(query).fetchall()
         # object mapping
-        return self.map_result(query_results)
+        return self._map_result(query_results)
 
-    def map_result(self, query_result):
+    def _map_result(self, query_result):
+        """Defines how to map DB results (rows) to the desired object. Must be implemented by subclass
+
+        :raises NotImplementedError: if not implemented
+        """
         # Must be implemented by subclass
         raise NotImplementedError

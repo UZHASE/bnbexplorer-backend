@@ -7,13 +7,20 @@ from server.models.host import Host as Host_Model
 
 
 class Listing(Repository):
+    """ Repository for Listing object access"""
 
     def get_by_id(self, listing_id):
+        """ Retrieve a single Listing by its ID
+
+        :param listing_id: ID of Listing
+        :return: the Listing matching the given ID
+        :rtype: Listing
+        """
         # build query
-        listing_query = self.build_get_by_id_query(listing_id)
+        listing_query = self._build_get_by_id_query(listing_id)
         # execute query always returns a (singleton ot empty) list, but we need the Listing object
         images = self._db.execute('''SELECT urls FROM listings_images WHERE listing_id = ?''', (listing_id,)).fetchone()
-        listing = self.execute_select_query(listing_query.get_sql())
+        listing = self._execute_select_query(listing_query.get_sql())
 
         if listing:
             listing[0].images = images['urls'].split(' ') if images else []
@@ -22,18 +29,35 @@ class Listing(Repository):
         return listing
 
     def get_all_by_id(self, id_list):
+        """ Retrieve all Listings by the given IDs
+
+        :param id_list: list of Listing IDs
+        :return: all Listings matching the given IDs
+        :rtype: List[Listing]
+        """
         # build query
-        query = self.build_get_all_by_id_query(id_list)
+        query = self._build_get_all_by_id_query(id_list)
         # execute query
-        return self.execute_select_query(query.get_sql())
+        return self._execute_select_query(query.get_sql())
 
     def get_all(self, listings_filter):
-        # build query
-        query = self.build_get_all_query(listings_filter)
-        # execute query
-        return self.execute_select_query(query.get_sql())
+        """ Retrieve all Listings based on the provided filter criteria
 
-    def build_get_by_id_query(self, listing_id):
+        :param listings_filter: filter criteria for Listings
+        :return: all Listings matching the given filter criteria
+        :rtype: List[Listing]
+        """
+        # build query
+        query = self._build_get_all_query(listings_filter)
+        # execute query
+        return self._execute_select_query(query.get_sql())
+
+    def _build_get_by_id_query(self, listing_id):
+        """ Build query to retrieve a Listing by its ID
+
+        :param listing_id: ID of Listing
+        :return: SQL query ready to be executed
+        """
         # query building
         query = Query \
             .from_(self.listings) \
@@ -48,7 +72,12 @@ class Listing(Repository):
             .where(self.listings.id == listing_id)
         return query
 
-    def build_get_all_by_id_query(self, id_list):
+    def _build_get_all_by_id_query(self, id_list):
+        """ Build query to retrieve all Listing matching the given IDs
+
+        :param id_list: list of Listing IDs
+        :return: SQL query ready to be executed
+        """
         # query building
         query = Query \
             .from_(self.listings) \
@@ -63,7 +92,12 @@ class Listing(Repository):
             .where(self.listings.id.isin(id_list))
         return query
 
-    def build_get_all_query(self, filter):
+    def _build_get_all_query(self, filter):
+        """ Build query to retrieve all Listing matching the given filter criteria
+
+        :param filter: Listing filter criteria
+        :return: SQL query ready to be executed
+        """
         # query building
         query = Query \
             .from_(self.listings) \
@@ -79,6 +113,12 @@ class Listing(Repository):
         return self.add_where_clauses(query, filter)
 
     def add_where_clauses(self, query, filter):
+        """ Construct SQL WHERE clauses based on the given filter criteria
+
+        :param query: a given SQL query to be enhanced
+        :param filter: Listing filter criteria
+        :return: SQL query ready to be executed
+        """
         # WHERE clauses
         if filter.listing_name:
             query = query.where(Lower(self.listings.name).like(Lower(filter.listing_name + '%')))
@@ -113,6 +153,10 @@ class Listing(Repository):
         return query
 
     def get_metadata(self):
+        """ Retrieve Listing metadata (min values, max values, enums, etc.)
+
+        :return: Listing metadata
+        """
         min_max_listings = self._db.execute('''
         SELECT 
             MIN(price) minPrice, 
@@ -143,8 +187,13 @@ class Listing(Repository):
             'maxListingsPerHost': min_max_hosts['maxListingsPerHost']
         }
 
+    def _map_result(self, query_results):
+        """ Maps a SQL query result (row) to Listing objects
 
-    def map_result(self, query_results):
+        :param query_results: SQL query result (row)
+        :return: the resulting Listings
+        :rtype: List[Listing]
+        """
         # object mapping
         result = []
         for row in query_results:

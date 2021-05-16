@@ -316,7 +316,7 @@ class TestRecommendations(TestCase):
             5: [-90.97237, 80.04749, 3, 100, 55, 12, 1],
             6: [-80.97237, 90.04749, 3, 100, 55, 12, 1],
         }
-        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
+        recommendations = RecommendationsRepository()._compute_n_recommendations(listing_dict, target, n=num_of_recs)
         # matches a listing with given ID
         self.assertTrue(recommendations)
         self.assertEqual(num_of_recs, len(recommendations))
@@ -333,7 +333,7 @@ class TestRecommendations(TestCase):
             5: [-90.97237, 80.04749, 3, 100, 55, 12, 1],
             6: [-80.97237, 90.04749, 3, 100, 55, 12, 1],
         }
-        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
+        recommendations = RecommendationsRepository()._compute_n_recommendations(listing_dict, target, n=num_of_recs)
         # matches a listing with given ID
         self.assertTrue(recommendations)
         self.assertEqual(num_of_recs, len(recommendations))
@@ -347,7 +347,7 @@ class TestRecommendations(TestCase):
             1: [-70.97237, 40.04749, 1, 100, 5, 12, 365],
             2: [-80.97237, 50.04749, 2, 100, 55, 12, 1]
         }
-        recommendations = RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
+        recommendations = RecommendationsRepository()._compute_n_recommendations(listing_dict, target, n=num_of_recs)
         # matches a listing with given ID
         self.assertTrue(recommendations)
         self.assertEqual(num_of_recs, len(recommendations))
@@ -357,7 +357,7 @@ class TestRecommendations(TestCase):
         num_of_recs = 1
         listing_dict = None
         with self.assertRaises(ValueError):
-            RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
+            RecommendationsRepository()._compute_n_recommendations(listing_dict, target, n=num_of_recs)
 
     def test_compute_n_recommendations_no_target_id_provided(self):
         target = None
@@ -369,7 +369,7 @@ class TestRecommendations(TestCase):
             3: [-80.97237, 50.04749, 2, 100, 55, 12, 1]
         }
         with self.assertRaises(ValueError):
-            RecommendationsRepository().compute_n_recommendations(listing_dict, target, n=num_of_recs)
+            RecommendationsRepository()._compute_n_recommendations(listing_dict, target, n=num_of_recs)
 
     ########################################
     #   Test: euclidean_distance    #
@@ -377,14 +377,14 @@ class TestRecommendations(TestCase):
     def test_euclidean_distance_successful(self):
         row = [3, 3, 3, 3, 3, 3, 3]
         target = [1, 1, 1, 1, 1, 1, 1]
-        distance = RecommendationsRepository().euclidean_distance(target, row)
+        distance = RecommendationsRepository()._euclidean_distance(target, row)
         # compute distance
         self.assertEqual(5.291502622129181, distance)
 
     def test_euclidean_distance_empty_arrays(self):
         row = []
         target = []
-        distance = RecommendationsRepository().euclidean_distance(target, row)
+        distance = RecommendationsRepository()._euclidean_distance(target, row)
         # compute distance
         self.assertEqual(0, distance)
 
@@ -393,7 +393,7 @@ class TestRecommendations(TestCase):
         target = None
         # compute distance
         with self.assertRaises(ValueError):
-            RecommendationsRepository().euclidean_distance(target, row)
+            RecommendationsRepository()._euclidean_distance(target, row)
 
     ##########################
     #   Test: map_result    #
@@ -401,5 +401,5 @@ class TestRecommendations(TestCase):
     def test_map_result_successful(self):
         row = [[-73.97237, 40.64749, 1, 149, 1, 9, 365]]
         expected_dict = {-73.97237: [40.64749, 1, 149, 1, 9, 365]}
-        actual_dict = RecommendationsRepository().map_result(row)
+        actual_dict = RecommendationsRepository()._map_result(row)
         self.assertEqual(expected_dict, actual_dict)

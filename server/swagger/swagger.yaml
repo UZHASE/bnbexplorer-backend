@@ -316,26 +316,6 @@ paths:
         "500":
           description: Internal Server Error
       x-openapi-router-controller: server.controllers.layers_controller
-  /listings/attractions:
-    get:
-      tags:
-      - Recommendations
-      summary: Recommend closest AirBnBs based on a list of Attractions
-      description: Returns a list of recommended Listings
-      operationId: recommend_listings_for_attractions
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Listing'
-                x-content-type: application/json
-        "500":
-          description: Internal Server Error
-      x-openapi-router-controller: server.controllers.recommendations_controller
   /listings/recommendations:
     get:
       tags:
