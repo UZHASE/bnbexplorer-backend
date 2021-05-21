@@ -5,6 +5,8 @@ omit =
     */migrations/*
     */models/*
     */utils/*
+    */docs/*
+    */scripts/*
     */__init__.py
     */__main__.py
 
