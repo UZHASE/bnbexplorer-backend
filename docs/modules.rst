@@ -6,3 +6,4 @@ bnbexplorer-backend
 
    server
    setup
+   test
