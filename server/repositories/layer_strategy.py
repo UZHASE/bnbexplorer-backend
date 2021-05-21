@@ -14,11 +14,11 @@ class LayerStrategy(metaclass=abc.ABCMeta):
     """
 
     @abc.abstractmethod
-    def build_get_all_query(self):
+    def _build_get_all_query(self):
         pass
 
     @abc.abstractmethod
-    def map_result(self, query_results):
+    def _map_result(self, query_results):
         pass
 
 
@@ -27,7 +27,7 @@ class HealthLayerStrategy(LayerStrategy):
     Implement health layer using the Strategy interface.
     """
 
-    def build_get_all_query(self):
+    def _build_get_all_query(self):
         # table
         rat_sightings = Table('rat_sightings')
         # query building
@@ -37,7 +37,7 @@ class HealthLayerStrategy(LayerStrategy):
 
         return query.get_sql()
 
-    def map_result(self, query_results):
+    def _map_result(self, query_results):
         # object mapping
         layer = Layer_Model(type=LayerType.HEALTH.value)
         result = []
@@ -54,7 +54,7 @@ class CrimeLayerStrategy(LayerStrategy):
     Implement the crime layer using the Strategy interface.
     """
 
-    def build_get_all_query(self):
+    def _build_get_all_query(self):
         # table
         nypd_incidents = Table('nypd_incidents')
         # query building
@@ -65,7 +65,7 @@ class CrimeLayerStrategy(LayerStrategy):
 
         return query.get_sql()
 
-    def map_result(self, query_results):
+    def _map_result(self, query_results):
         # object mapping
         layer = Layer_Model(type=LayerType.CRIME.value)
         result = []
@@ -82,7 +82,7 @@ class ComplaintLayerStrategy(LayerStrategy):
     Implement the complaint layer using the Strategy interface.
     """
 
-    def build_get_all_query(self):
+    def _build_get_all_query(self):
         # table
         nypd_incidents = Table('nypd_incidents')
         # query building
@@ -92,7 +92,7 @@ class ComplaintLayerStrategy(LayerStrategy):
             .where(nypd_incidents.crime_type == 'OFF. AGNST PUB ORD SENSBLTY &')\
             .get_sql()
 
-    def map_result(self, query_results):
+    def _map_result(self, query_results):
         # object mapping
         layer = Layer_Model(type=LayerType.COMPLAINT.value)
         result = []

@@ -1,13 +1,16 @@
 [run]
 branch = True
 omit =
-    /test/*
+    */test/*
     */migrations/*
-    *__init__.py*
-    *__main__.py*
+    */models/*
+    */utils/*
+    */__init__.py
+    */__main__.py
 
 [report]
 exclude_lines =
     # Ignore imports
     from
     import
+    pass

@@ -316,26 +316,6 @@ paths:
         "500":
           description: Internal Server Error
       x-openapi-router-controller: server.controllers.layers_controller
-  /listings/attractions:
-    get:
-      tags:
-      - Recommendations
-      summary: Recommend closest AirBnBs based on a list of Attractions
-      description: Returns a list of recommended Listings
-      operationId: recommend_listings_for_attractions
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Listing'
-                x-content-type: application/json
-        "500":
-          description: Internal Server Error
-      x-openapi-router-controller: server.controllers.recommendations_controller
   /listings/recommendations:
     get:
       tags:
@@ -466,30 +446,256 @@ components:
       properties:
         id:
           type: integer
+          description: Listing ID
+          example: 2539
         name:
           type: string
+          description: Listing name
+          example: My Fancy Room
         host:
           $ref: '#/components/schemas/Host'
         neighbourhood:
           type: string
+          description: The neighbourhood in which the Listing is located
+          enum:
+            - Brooklyn
+            - Manhattan
+            - Queens
+            - Staten Island
+            - Bronx
         area:
           type: string
+          description: The area in which the Listing is located
+          enum:
+            - Kensington
+            - Bedford-Stuyvesant
+            - West Village
+            - Fort Greene
+            - Crown Heights
+            - Inwood
+            - Greenpoint
+            - East Village
+            - South Slope
+            - Prospect-Lefferts Gardens
+            - Lower East Side
+            - SoHo
+            - Williamsburg
+            - Chelsea
+            - Hell's Kitchen
+            - Park Slope
+            - Clinton Hill
+            - Upper East Side
+            - Bushwick
+            - Prospect Heights
+            - Harlem
+            - East Harlem
+            - Sunnyside
+            - St. George
+            - Jamaica
+            - Middle Village
+            - Highbridge
+            - Chinatown
+            - Upper West Side
+            - Tompkinsville
+            - Eastchester
+            - Little Italy
+            - Carroll Gardens
+            - Kingsbridge
+            - Brooklyn Heights
+            - Washington Heights
+            - Gowanus
+            - Midtown
+            - Boerum Hill
+            - Nolita
+            - Morningside Heights
+            - Kips Bay
+            - Astoria
+            - Theater District
+            - Long Island City
+            - DUMBO
+            - Jackson Heights
+            - St. Albans
+            - Arrochar
+            - Clifton
+            - Ridgewood
+            - East Flatbush
+            - Ozone Park
+            - Briarwood
+            - Mott Haven
+            - Canarsie
+            - Tribeca
+            - Sunset Park
+            - Greenwich Village
+            - Concourse
+            - Flushing
+            - Windsor Terrace
+            - Cobble Hill
+            - Gramercy
+            - Ditmars Steinway
+            - Flatlands
+            - Murray Hill
+            - East Elmhurst
+            - Concord
+            - Flatbush
+            - Bayside
+            - Port Morris
+            - Fieldston
+            - Elmhurst
+            - Civic Center
+            - Red Hook
+            - Bay Ridge
+            - Two Bridges
+            - Flatiron District
+            - Financial District
+            - Queens Village
+            - Woodside
+            - NoHo
+            - Midwood
+            - Shore Acres
+            - East New York
+            - Soundview
+            - Woodhaven
+            - Battery Park City
+            - Cypress Hills
+            - Bronxdale
+            - Sea Gate
+            - Rego Park
+            - Rockaway Beach
+            - Whitestone
+            - Richmond Hill
+            - Concourse Village
+            - Forest Hills
+            - Wakefield
+            - Stapleton
+            - Lighthouse Hill
+            - Roosevelt Island
+            - Downtown Brooklyn
+            - Allerton
+            - Jamaica Estates
+            - Williamsbridge
+            - Bensonhurst
+            - Clason Point
+            - Mount Hope
+            - West Brighton
+            - Bay Terrace
+            - Far Rockaway
+            - Longwood
+            - Great Kills
+            - Sheepshead Bay
+            - Arverne
+            - Kew Gardens
+            - Gravesend
+            - Fort Hamilton
+            - Stuyvesant Town
+            - East Morrisania
+            - Springfield Gardens
+            - Borough Park
+            - Vinegar Hill
+            - Columbia St
+            - Hunts Point
+            - Pelham Bay
+            - City Island
+            - Fresh Meadows
+            - Todt Hill
+            - Howard Beach
+            - Laurelton
+            - Holliswood
+            - Parkchester
+            - Corona
+            - Brownsville
+            - Dyker Heights
+            - Marble Hill
+            - Rosedale
+            - Melrose
+            - Norwood
+            - Cambria Heights
+            - Fordham
+            - Richmondtown
+            - Maspeth
+            - South Ozone Park
+            - Manhattan Beach
+            - Brighton Beach
+            - Kew Gardens Hills
+            - Howland Hook
+            - Schuylerville
+            - Coney Island
+            - Claremont Village
+            - Randall Manor
+            - Midland Beach
+            - Jamaica Hills
+            - Eltingville
+            - Woodlawn
+            - Glendale
+            - Navy Yard
+            - Huguenot
+            - Tremont
+            - Edenwald
+            - Baychester
+            - University Heights
+            - Bergen Beach
+            - Throgs Neck
+            - Bellerose
+            - Morris Park
+            - Westchester Square
+            - Riverdale
+            - College Point
+            - Belmont
+            - Douglaston
+            - Morris Heights
+            - New Springville
+            - Pelham Gardens
+            - Arden Heights
+            - Bath Beach
+            - Olinville
+            - Grymes Hill
+            - Mount Eden
+            - Morrisania
+            - Hollis
+            - Mill Basin
+            - New Brighton
+            - Bull's Head
+            - Dongan Hills
+            - Rosebank
+            - Van Nest
+            - South Beach
+            - Mariners Harbor
+            - Tottenville
+            - North Riverdale
+            - Bayswater
         latitude:
           type: number
+          description: The exact latitude where the Listing is located
+          example: 5.962133916683182377482808078639209270477294921875
         longitude:
           type: number
+          description: The exact longitude where the Listing is located
+          example:  5.63737665663332876420099637471139430999755859375
         roomType:
           type: string
+          description: The type of room which the Listing offers
+          enum:
+            - Private room
+            - Entire home/apt
+            - Shared Room
         price:
           type: integer
+          description: Price of the Listing
+          example: 100
         minNights:
           type: integer
+          description: Minimum number of nights that this Listing can be booked for
+          example: 1
         numOfReviews:
           type: integer
+          description: The amount of reviews for this Listing
+          example: 5
         availability:
           type: integer
+          description: The availability in days (of a year)
+          example: 365
         images:
           type: array
+          example: https://example.com/path_to_image_1
           items:
             type: string
       example:
@@ -514,10 +720,16 @@ components:
       properties:
         id:
           type: integer
+          description: Host ID
+          example: 1
         name:
           type: string
+          description: Host name
+          example: John
         numOfListings:
           type: integer
+          description: The number of Listings for the Host
+          example: 5
       example:
         name: name
         numOfListings: 1
@@ -527,10 +739,16 @@ components:
       properties:
         id:
           type: integer
+          description: Review ID
+          example: 1
         listingId:
           type: integer
+          description: ID of the Listing which this Review refers to
+          example: 2539
         text:
           type: string
+          description: The content of the Review (text)
+          example: Very nice room!
       example:
         id: 0
         listingId: 6
@@ -540,12 +758,14 @@ components:
       properties:
         type:
           type: string
+          description: The type of Layer
           enum:
           - CRIME_LAYER
           - COMPLAINT_LAYER
           - HEALTH_LAYER
         entries:
           type: array
+          description: List of all LayerEntries for this Layer
           items:
             $ref: '#/components/schemas/LayerEntry'
       example:
@@ -560,8 +780,12 @@ components:
       properties:
         latitude:
           type: number
+          description: The exact latitude of this LayerEntry
+          example: 6.02745618307040320615897144307382404804229736328125
         longitude:
           type: number
+          description: The exact longitude of this LayerEntry
+          example: 1.46581298050294517310021547018550336360931396484375
       example:
         latitude: 6.02745618307040320615897144307382404804229736328125
         longitude: 1.46581298050294517310021547018550336360931396484375
@@ -570,26 +794,39 @@ components:
       properties:
         minPrice:
           type: integer
+          description: The lowest price of all Listings
+          example: 1
         maxPrice:
           type: integer
+          description: The highest price of all Listings
+          example: 1000
         numOfListings:
           type: integer
+          description: The total number of Listings
+          example: 9705
         areas:
           type: array
+          description: All present areas of NYC (see Listing schema for exhaustive list)
           items:
             type: string
         neighbourhoods:
           type: array
+          description: All present neighbourhoods of NYC (see Listing schema for exhaustive list)
           items:
             type: string
         roomTypes:
           type: array
+          description: All possible room types (see Listing schema for exhaustive list)
           items:
             type: string
         minListingsPerHost:
           type: integer
+          description: The minimum number of Listings per Host
+          example: 1
         maxListingsPerHost:
           type: integer
+          description: The maximum number of Listings per Host
+          example: 49
       example:
         minPrice: 20
         maxPrice: 1800

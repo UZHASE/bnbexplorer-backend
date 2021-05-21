@@ -1,4 +1,7 @@
 class ListingsFilter:
+    """
+    Defines all the available filter criteria to query Listings
+    """
     def __init__(self, listing_name=None, host_id=None, host_name=None,
                  neighbourhood=None, area=None, price_min=None, price_max=None,
                  min_nights=None, availability=None, listings_per_host=None, room_type=None):
